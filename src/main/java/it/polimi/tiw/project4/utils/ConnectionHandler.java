@@ -7,11 +7,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class ConnectionHandler {
-
 	public static Connection getConnection(ServletContext context) throws UnavailableException {
-		Connection connection = null;
+		Connection connection;
 		try {
-
 			String driver = context.getInitParameter("dbDriver");
 			String url = context.getInitParameter("dbUrl");
 			String user = context.getInitParameter("dbUser");
@@ -19,9 +17,9 @@ public class ConnectionHandler {
 			Class.forName(driver);
 			connection = DriverManager.getConnection(url, user, password);
 		} catch (ClassNotFoundException e) {
-			throw new UnavailableException("Can't load database driver");
+			throw new UnavailableException("Couldn't load the database driver");
 		} catch (SQLException e) {
-			throw new UnavailableException("Couldn't get db connection");
+			throw new UnavailableException("Couldn't open a connection to the DB");
 		}
 		return connection;
 	}
@@ -31,5 +29,4 @@ public class ConnectionHandler {
 			connection.close();
 		}
 	}
-
 }

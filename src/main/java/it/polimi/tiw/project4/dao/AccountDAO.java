@@ -17,12 +17,12 @@ public class AccountDAO {
         this.con = connection;
     }
 
-    public List<Account> getAccounts(User user) throws SQLException {
+    public List<Account> getAccounts(int userid) throws SQLException {
         String query = "SELECT code, balance " +
                 "FROM account NATURAL JOIN user " +
                 "WHERE userID = ?";
         try (PreparedStatement pstatement = con.prepareStatement(query)) {
-            pstatement.setInt(1, user.getId());
+            pstatement.setInt(1, userid);
             try (ResultSet result = pstatement.executeQuery()) {
                 if (!result.isBeforeFirst()) // no results, credential check failed
                 {
@@ -36,6 +36,42 @@ public class AccountDAO {
                         userAccounts.add(account);
                     }
                     return userAccounts;
+                }
+            }
+        }
+    }
+
+    public List<Account> getAccounts(User user) throws SQLException {
+        return getAccounts(user.getId());
+    }
+
+    public void createAccount(int userid) throws SQLException {
+        String query = "INSERT INTO account (userID) VALUES (?)";
+        try (PreparedStatement pstatement = con.prepareStatement(query)) {
+            pstatement.setInt(1, userid);
+            pstatement.executeUpdate();
+        }
+    }
+
+    public void createAccount(User user) throws SQLException {
+        createAccount(user.getId());
+    }
+
+    public Account getAccount(int code) throws SQLException {
+        String query = "SELECT code, balance " +
+                "FROM account " +
+                "WHERE code = ?";
+        try (PreparedStatement pstatement = con.prepareStatement(query)) {
+            pstatement.setInt(1, code);
+            try (ResultSet result = pstatement.executeQuery()) {
+                if (!result.isBeforeFirst()) // no results, credential check failed
+                    throw new SQLException();
+                else {
+                    result.next();
+                    Account account = new Account();
+                    account.setCode(result.getInt("code"));
+                    account.setBalance(result.getFloat("balance"));
+                    return account;
                 }
             }
         }

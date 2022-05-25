@@ -17,13 +17,13 @@ public class TransferDAO {
         this.con = connection;
     }
 
-    public List<Transfer> getTransfers(Account account) throws SQLException {
-        String query = "SELECT id, date, amount, sender, recipient " +
+    public List<Transfer> getTransfers(int accountcode) throws SQLException {
+        String query = "SELECT ID, date, amount, sender, recipient " +
                 "FROM transfer JOIN user " +
                 "WHERE sender = ? OR recipient = ?";
         try (PreparedStatement pstatement = con.prepareStatement(query)) {
-            pstatement.setInt(1, account.getCode());
-            pstatement.setInt(2, account.getCode());
+            pstatement.setInt(1, accountcode);
+            pstatement.setInt(2, accountcode);
             try (ResultSet result = pstatement.executeQuery()) {
                 if (!result.isBeforeFirst()) // no results, credential check failed
                 {
@@ -43,5 +43,9 @@ public class TransferDAO {
                 }
             }
         }
+    }
+
+    public List<Transfer> getTransfers(Account account) throws SQLException {
+        return getTransfers(account.getCode());
     }
 }

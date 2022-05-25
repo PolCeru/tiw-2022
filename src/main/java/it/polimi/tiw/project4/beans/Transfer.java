@@ -10,19 +10,19 @@ public class Transfer {
 
     private float amount;
 
-    private int from;
+    private int sender;
 
-    private int to;
+    private int recipient;
 
     public Transfer() {
     }
 
-    public Transfer(int transferID, Date date, float amount, int from, int to) {
+    public Transfer(int transferID, Date date, float amount, int sender, int recipient) {
         this.transferID = transferID;
         this.date = date;
         this.amount = amount;
-        this.from = from;
-        this.to = to;
+        this.sender = sender;
+        this.recipient = recipient;
     }
 
     public int getTransferID() {
@@ -50,18 +50,18 @@ public class Transfer {
     }
 
     public int getFrom() {
-        return from;
+        return sender;
     }
 
-    public void setFrom(int from) {
-        this.from = from;
+    public void setFrom(int sender) {
+        this.sender = sender;
     }
 
     public int getTo() {
-        return to;
+        return recipient;
     }
 
-    public void setTo(int to) {
-        this.to = to;
+    public void setTo(int recipient) {
+        this.recipient = recipient;
     }
 }

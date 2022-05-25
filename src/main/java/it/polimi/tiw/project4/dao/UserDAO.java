@@ -14,11 +14,11 @@ public class UserDAO {
         this.con = connection;
     }
 
-    public User checkCredentials(String email, String pwd) throws SQLException {
-        String query = "SELECT id, email, name, surname FROM user WHERE email = ? AND password = ?";
+    public User getUser(String email, String password) throws SQLException {
+        String query = "SELECT userID, email, name, surname FROM user WHERE email = ? AND password = ?";
         try (PreparedStatement pstatement = con.prepareStatement(query)) {
             pstatement.setString(1, email);
-            pstatement.setString(2, pwd);
+            pstatement.setString(2, password);
             try (ResultSet result = pstatement.executeQuery()) {
                 if (!result.isBeforeFirst()) // no results, credential check failed
                     return null;
@@ -32,6 +32,17 @@ public class UserDAO {
                     return user;
                 }
             }
+        }
+    }
+
+    public void createUser(String name, String surname, String email, String password) throws SQLException {
+        String query = "INSERT INTO user (name, surname, email, password) VALUES (?, ?, ?, ?)";
+        try (PreparedStatement pstatement = con.prepareStatement(query)) {
+            pstatement.setString(1, name);
+            pstatement.setString(2, surname);
+            pstatement.setString(3, email);
+            pstatement.setString(4, password);
+            pstatement.executeUpdate();
         }
     }
 }
