@@ -11,5 +11,15 @@
         <li><a th:text="${account.code}" th:href="@{/account/{code}(code=${account.code})}">code</a></li>
     </ul>
 </div>
+<div id="open-account">
+    <h3>Open a new account</h3>
+    <form action="account/open" method="POST">
+        <label>Initial balance:
+            <input type="number" step="0.01" name="balance" th:value="${balance}" required>
+        </label><br>
+        <input type="submit" value="Open">
+        <p th:text="${errorMsg}"></p>
+    </form>
+</div>
 </body>
 </html>
