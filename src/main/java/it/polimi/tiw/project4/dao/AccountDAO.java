@@ -44,16 +44,17 @@ public class AccountDAO {
         return getAccounts(user.getId());
     }
 
-    public void createAccount(int userid) throws SQLException {
-        String query = "INSERT INTO account (userID) VALUES (?)";
+    public void createAccount(int userid, float balance) throws SQLException {
+        String query = "INSERT INTO account (userID, balance) VALUES (?, ?)";
         try (PreparedStatement pstatement = con.prepareStatement(query)) {
             pstatement.setInt(1, userid);
+            pstatement.setFloat(2, balance);
             pstatement.executeUpdate();
         }
     }
 
-    public void createAccount(User user) throws SQLException {
-        createAccount(user.getId());
+    public void createAccount(User user, float balance) throws SQLException {
+        createAccount(user.getId(), balance);
     }
 
     public Account getAccount(int code) throws SQLException {

@@ -79,7 +79,6 @@ public class SignUp extends HttpServlet {
 
         // Query DB to check if the user already exists
         UserDAO userDao = new UserDAO(connection);
-        AccountDAO accountDao = new AccountDAO(connection);
         try {
             String path;
             User user = userDao.getUser(email, password);
@@ -88,8 +87,6 @@ public class SignUp extends HttpServlet {
             // Otherwise, create a user and an associated account and return to the login page
             if (user == null) {
                 userDao.createUser(name, surname, email, password);
-                user = userDao.getUser(email, password);
-                accountDao.createAccount(user);
                 path = getServletContext().getContextPath() + "/index.html";
                 response.sendRedirect(path);
             } else {
