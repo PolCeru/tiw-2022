@@ -25,9 +25,8 @@ public class AccountDAO {
             pstatement.setInt(1, userid);
             try (ResultSet result = pstatement.executeQuery()) {
                 if (!result.isBeforeFirst()) // no results, credential check failed
-                {
                     return null;
-                } else {
+                else {
                     ArrayList<Account> userAccounts = new ArrayList<>();
                     while (result.next()) {
                         Account account = new Account();

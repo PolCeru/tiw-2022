@@ -19,9 +19,8 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-@WebServlet("/Login")
+@WebServlet("/login")
 public class Login extends HttpServlet {
-    private static final long serialVersionUID = 1L;
     private Connection connection = null;
     private TemplateEngine templateEngine;
 
@@ -29,6 +28,7 @@ public class Login extends HttpServlet {
         super();
     }
 
+    @Override
     public void init() throws ServletException {
         connection = ConnectionHandler.getConnection(getServletContext());
         ServletContext servletContext = getServletContext();
@@ -39,52 +39,43 @@ public class Login extends HttpServlet {
         templateResolver.setSuffix(".html");
     }
 
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        // obtain and escape params
-        String usrn;
-        String pwd;
-        try {
-            usrn = StringEscapeUtils.escapeJava(request.getParameter("username"));
-            pwd = StringEscapeUtils.escapeJava(request.getParameter("pwd"));
-            if (usrn == null || pwd == null || usrn.isEmpty() || pwd.isEmpty()) {
-                throw new Exception("Missing or empty credential value");
-            }
-
-        } catch (Exception e) {
-            // for debugging only e.printStackTrace();
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing credential value");
+            throws IOException {
+        // Obtain and escape params
+        String email = StringEscapeUtils.escapeJava(request.getParameter("email"));
+        String password = StringEscapeUtils.escapeJava(request.getParameter("password"));
+        if (email == null || password == null || email.isBlank() || password.isBlank()) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid credentials");
             return;
         }
 
-        // query db to authenticate for user
+        // Query DB to authenticate the user
         UserDAO userDao = new UserDAO(connection);
         User user;
         try {
-            user = userDao.checkCredentials(usrn, pwd);
-        } catch (SQLException e) {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not Possible to check credentials");
+            user = userDao.getUser(email, password);
+        } catch (Exception e) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to check credentials");
             return;
         }
 
         // If the user exists, add info to the session and go to home page, otherwise
         // show login page with error message
-
-        String path;
         if (user == null) {
             ServletContext servletContext = getServletContext();
             final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
+            ctx.setVariable("email", email);
             ctx.setVariable("errorMsg", "Incorrect username or password");
-            path = "/index.html";
-            templateEngine.process(path, ctx, response.getWriter());
+            templateEngine.process("/index.html", ctx, response.getWriter());
         } else {
-            request.getSession().setAttribute("user", user);
-            path = getServletContext().getContextPath() + "/Home";
+            request.getSession().setAttribute("userid", user.getId());
+            String path = getServletContext().getContextPath() + "/home";
             response.sendRedirect(path);
         }
-
     }
 
+    @Override
     public void destroy() {
         try {
             ConnectionHandler.closeConnection(connection);
