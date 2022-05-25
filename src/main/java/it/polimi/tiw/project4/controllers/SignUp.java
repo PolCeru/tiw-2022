@@ -55,6 +55,17 @@ public class SignUp extends HttpServlet {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid registration credentials");
             return;
         }
+
+        // We don't bother checking for full email addresses validity, this is just a basic check
+        if (!email.contains("@")) {
+            ServletContext servletContext = getServletContext();
+            final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
+            ctx.setVariable("nameSignup", name);
+            ctx.setVariable("surnameSignup", surname);
+            ctx.setVariable("errorMsgSignup", "Invalid email address");
+            templateEngine.process("/index.html", ctx, response.getWriter());
+            return;
+        }
         if (!password.equals(confirmPassword)) {
             ServletContext servletContext = getServletContext();
             final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
