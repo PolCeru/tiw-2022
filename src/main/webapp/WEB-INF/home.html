@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Homepage</title>
+</head>
+<body>
+<h1 th:text="Welcome back, ${name}!">Welcome back!</h1>
+<div class="account-list">
+    <ul th:each="account: ${accounts}">
+        <li><a th:text="${account.code}" th:href="@{/account/{code}(code=${account.code})}">code</a></li>
+    </ul>
+</div>
+</body>
+</html>

@@ -3,16 +3,44 @@
 <head>
     <meta charset="ISO-8859-1">
     <title>Login page</title>
+    <link rel="stylesheet" type="text/css" media="all" href="css/login.css"/>
 </head>
 <body>
 <h1>Welcome to the mission management application</h1>
+<div id="login">
+    <form action="login" method="POST">
+        <label>Email:
+            <input type="text" name="email" th:value="${email}" required>
+        </label><br>
+        <label>Password:
+            <input type="password" name="password" required>
+        </label><br>
+        <input type="submit" value="Login">
+        <p th:text="${errorMsg}"></p>
+    </form>
+</div>
 
-<form action="CheckLogin" method="POST">
-    Username: <input type="text" name="username" required> <br>
-    Password: <input type="password" name="pwd" required><br>
-    <input type="submit" value="login">
-    <p th:text="${errorMsg}"></p>
-</form>
+<div id="signup">
+    <form action="signup" method="POST">
+        <label>Email:
+            <input type="text" name="email" th:value="${emailSignup}" required>
+        </label><br>
+        <label>Name:
+            <input type="text" name="name" th:value="${nameSignup}" required>
+        </label><br>
+        <label>Surname:
+            <input type="text" name="surname" th:value="${surnameSignup}" required>
+        </label><br>
+        <label>Password:
+            <input type="password" name="password" required>
+        </label><br>
+        <label>Confirm Password:
+            <input type="password" name="confirmPassword" required>
+        </label><br>
+        <input type="submit" value="SignUp">
+        <p th:text="${errorMsgSignup}"></p>
+    </form>
+</div>
 
 </body>
 </html>

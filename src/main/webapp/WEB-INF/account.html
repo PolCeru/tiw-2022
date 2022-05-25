@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Account Page</title>
+</head>
+<body>
+<h1 th:text="Account n. ${accountID}">Account Page</h1>
+<div class="account-details">
+    <p th:text="${accountID}">code</p>
+    <span class="account-balance" th:text="'$' ${balance}">balance</span>
+</div>
+<div class="transfer-list">
+    <table>
+        <thead>
+        <tr>
+            <td>ID</td>
+            <td>Date</td>
+            <td>Amount</td>
+            <td>Sender</td>
+            <td>Recipient</td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="transfer: ${transfers}">
+            <td th:text="${transfer.transferID}"></td>
+            <td th:text="${transfer.date}"></td>
+            <td th:text="${transfer.amount}"></td>
+            <td th:text="${transfer.sender}"></td>
+            <td th:text="${transfer.recipient}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
