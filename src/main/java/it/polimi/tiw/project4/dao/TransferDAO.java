@@ -16,7 +16,8 @@ public class TransferDAO {
 
     public List<Transfer> getTransfers(int accountcode) throws SQLException {
         String query = "SELECT ID, date, amount, sender, recipient " +
-                "FROM transfer JOIN user " +
+                "FROM transfer JOIN account s on sender = s.userID " +
+                "JOIN account r on recipient = r.userID " +
                 "WHERE sender = ? OR recipient = ?";
         try (PreparedStatement pstatement = con.prepareStatement(query)) {
             pstatement.setInt(1, accountcode);
@@ -47,12 +48,13 @@ public class TransferDAO {
     }
 
     public void createTransfer(int sender, int recipient, String reason, float amount) throws SQLException {
-        String query = "INSERT INTO transfer (date, amount, sender, recipient) VALUES (?, ?, ?, ?)";
+        String query = "INSERT INTO transfer (date, amount, sender, recipient, reason) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement pstatement = con.prepareStatement(query)) {
             pstatement.setDate(1, new Date(System.currentTimeMillis()));
             pstatement.setFloat(2, amount);
             pstatement.setInt(3, sender);
             pstatement.setInt(4, recipient);
+            pstatement.setString(5, reason);
             pstatement.executeUpdate();
         }
         // TODO: update sender and recipient balance with an atomic transaction
