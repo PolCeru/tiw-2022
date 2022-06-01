@@ -8,7 +8,23 @@
 <h1 th:text="${'Account n. ' + accountID}">Account Page</h1>
 <div class="account-details">
     <p th:text="${accountID}">code</p>
-    <span class="account-balance" th:text="${'$' + balance}">balance</span>
+    <span class="account-balance" th:text="${'$ ' + balance}">balance</span>
+</div>
+<div id="transfer-make">
+    <h3>Transfer</h3>
+    <form action="transfer" method="POST">
+        <label>Recipient account code:
+            <input type="text" name="accountCode" th:value="${accountCode}" required>
+        </label><br>
+        <label>Reason:
+            <input type="text" name="reason" th:value="${reason}" required>
+        </label><br>
+        <label>Transfer amount:
+            <input type="number" step="0.01" name="amount" th:value="${amount}" required>
+        </label><br>
+        <input type="submit" value="Transfer">
+        <p th:text="${errorMsg}"></p>
+    </form>
 </div>
 <div class="transfer-list">
     <table>
