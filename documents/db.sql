@@ -1,4 +1,4 @@
-CREATE DATABASE IF NOT EXISTS `db_tiw_2022` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+CREATE DATABASE IF NOT EXISTS `db_tiw_2022`;
 USE `db_tiw_2022`;
 
 --
@@ -12,9 +12,7 @@ CREATE TABLE user
     `name`     varchar(45)     NOT NULL,
     `surname`  varchar(45)     NOT NULL,
     `password` varchar(45)     NOT NULL
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 4
-  DEFAULT CHARSET = utf8mb4
+) DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;
 
 --
@@ -31,10 +29,10 @@ DROP TABLE IF EXISTS `account`;
 CREATE TABLE `account`
 (
     `code`    int            NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    `userID`  int            NOT NULL REFERENCES user (userID) ON UPDATE CASCADE ON DELETE NO ACTION,
-    `balance` decimal(10, 2) NOT NULL DEFAULT 0
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4
+    `userID`  int            NOT NULL,
+    `balance` decimal(10, 2) NOT NULL DEFAULT 0,
+    FOREIGN KEY `account` (userID) REFERENCES `user` (userID) ON UPDATE CASCADE ON DELETE NO ACTION
+) DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;
 
 --
@@ -53,14 +51,16 @@ CREATE TABLE transfer
     `ID`        int PRIMARY KEY NOT NULL AUTO_INCREMENT,
     `date`      date            NOT NULL,
     `amount`    decimal(10, 2)  NOT NULL,
-    `sender`    int             NOT NULL REFERENCES account (userID) ON UPDATE CASCADE ON DELETE NO ACTION,
-    `recipient` int             NOT NULL REFERENCES account (userID) ON UPDATE CASCADE ON DELETE NO ACTION
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4
+    `sender`    int             NOT NULL,
+    `recipient` int             NOT NULL,
+    `reason`    varchar(150)    NOT NULL,
+    FOREIGN KEY `transfer` (sender) REFERENCES `account` (userID) ON UPDATE CASCADE ON DELETE NO ACTION,
+    FOREIGN KEY `transfer` (sender) REFERENCES `account` (userID) ON UPDATE CASCADE ON DELETE NO ACTION
+) DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `transfer`
 --
-INSERT INTO transfer (date, amount, sender, recipient)
-VALUES ("2022-05-25", 30.22, 1, 2);
+INSERT INTO transfer (date, amount, sender, recipient, reason)
+VALUES ('2022-05-25', 30.22, 1, 2, 'dinner');
