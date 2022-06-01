@@ -4,6 +4,7 @@ target/
 !**/src/test/**/target/
 
 ### IntelliJ IDEA ###
+/src/main/webapp/WEB-INF/web.xml
 .idea/
 .idea/modules.xml
 .idea/jarRepositories.xml
