@@ -5,10 +5,10 @@
     <title>Homepage</title>
 </head>
 <body>
-<h1 th:text="Welcome back, ${name}!">Welcome back!</h1>
+<h1 th:text="${'Welcome back, ' + name + '!'}">Welcome back!</h1>
 <div class="account-list">
     <ul th:each="account: ${accounts}">
-        <li><a th:text="${account.code}" th:href="@{/account/{code}(code=${account.code})}">code</a></li>
+        <li><a th:text="${account.code}" th:href="@{/account(code=${account.code})}">code</a></li>
     </ul>
 </div>
 <div id="open-account">

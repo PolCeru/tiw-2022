@@ -5,10 +5,10 @@
     <title>Account Page</title>
 </head>
 <body>
-<h1 th:text="Account n. ${accountID}">Account Page</h1>
+<h1 th:text="${'Account n. ' + accountID}">Account Page</h1>
 <div class="account-details">
     <p th:text="${accountID}">code</p>
-    <span class="account-balance" th:text="'$' ${balance}">balance</span>
+    <span class="account-balance" th:text="${'$' + balance}">balance</span>
 </div>
 <div class="transfer-list">
     <table>

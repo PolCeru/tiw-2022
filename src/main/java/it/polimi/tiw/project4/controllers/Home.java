@@ -1,7 +1,9 @@
 package it.polimi.tiw.project4.controllers;
 
 import it.polimi.tiw.project4.beans.Account;
+import it.polimi.tiw.project4.beans.User;
 import it.polimi.tiw.project4.dao.AccountDAO;
+import it.polimi.tiw.project4.dao.UserDAO;
 import it.polimi.tiw.project4.utils.ConnectionHandler;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
@@ -42,11 +44,20 @@ public class Home extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
-        int userid = (int) request.getSession().getAttribute("userid");
+        int userId = (int) request.getSession().getAttribute("userid");
+        UserDAO userDao = new UserDAO(connection);
+        User user;
+        try {
+            user = userDao.getUser(userId);
+        } catch (SQLException e) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to retrieve user info");
+            return;
+        }
+
         AccountDAO accountDao = new AccountDAO(connection);
         List<Account> userAccounts;
         try {
-            userAccounts = accountDao.getAccounts(userid);
+            userAccounts = accountDao.getAccounts(userId);
         } catch (SQLException e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to retrieve user's accounts");
             return;
@@ -54,6 +65,7 @@ public class Home extends HttpServlet {
 
         ServletContext servletContext = getServletContext();
         final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
+        ctx.setVariable("name", user.getName());
         ctx.setVariable("accounts", userAccounts);
 
         templateEngine.process("/home.html", ctx, response.getWriter());
