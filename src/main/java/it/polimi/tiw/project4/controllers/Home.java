@@ -5,10 +5,9 @@ import it.polimi.tiw.project4.beans.User;
 import it.polimi.tiw.project4.dao.AccountDAO;
 import it.polimi.tiw.project4.dao.UserDAO;
 import it.polimi.tiw.project4.utils.ConnectionHandler;
+import it.polimi.tiw.project4.utils.TemplateEngineHandler;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
-import org.thymeleaf.templatemode.TemplateMode;
-import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -32,13 +31,9 @@ public class Home extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        connection = ConnectionHandler.getConnection(getServletContext());
         ServletContext servletContext = getServletContext();
-        ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(servletContext);
-        templateResolver.setTemplateMode(TemplateMode.HTML);
-        this.templateEngine = new TemplateEngine();
-        this.templateEngine.setTemplateResolver(templateResolver);
-        templateResolver.setSuffix(".html");
+        this.connection = ConnectionHandler.getConnection(servletContext);
+        this.templateEngine = TemplateEngineHandler.getEngine(servletContext);
     }
 
     @Override
