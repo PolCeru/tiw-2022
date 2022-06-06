@@ -1,17 +1,13 @@
 package it.polimi.tiw.project4.beans;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class Transfer {
-
     private int transferID;
-
     private Date date;
-
     private float amount;
-
     private int sender;
-
     private int recipient;
 
     public Transfer() {
@@ -63,5 +59,20 @@ public class Transfer {
 
     public void setRecipient(int recipient) {
         this.recipient = recipient;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        Transfer transfer = (Transfer) o;
+        return transferID == transfer.transferID;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(transferID);
     }
 }

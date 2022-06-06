@@ -1,18 +1,14 @@
 package it.polimi.tiw.project4.beans;
 
+import java.util.Objects;
+
 public class User {
-
     private int id;
-
     private String name;
-
     private String surname;
-
     private String email;
 
-
     public User() {
-
     }
 
     public User(int id, String name, String surname, String email, String password) {
@@ -52,5 +48,20 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        User user = (User) o;
+        return id == user.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
