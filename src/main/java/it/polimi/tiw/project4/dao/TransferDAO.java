@@ -72,32 +72,41 @@ public class TransferDAO {
     public int createTransfer(int sender, int recipient, String reason, float amount) throws SQLException {
         int transferId;
         String query = "INSERT INTO transfer (date, amount, sender, recipient, reason) VALUES (?, ?, ?, ?, ?)";
-        // We need to create a new transfer entry and update the sender and recipient balances
-        // Disable auto-commit to allow multiple statements to be executed as a single transaction
-        con.setAutoCommit(false);
-        try (PreparedStatement pstatement = con.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
-            pstatement.setDate(1, new Date(System.currentTimeMillis()));
-            pstatement.setFloat(2, amount);
-            pstatement.setInt(3, sender);
-            pstatement.setInt(4, recipient);
-            pstatement.setString(5, reason);
-            pstatement.executeUpdate();
-            try (ResultSet result = pstatement.getGeneratedKeys()) {
-                if (!result.isBeforeFirst()) { // no results, transfer was not created
-                    return 0;
-                } else {
-                    result.next();
-                    transferId = result.getInt(1);
+        try {
+            // We need to create a new transfer entry and update the sender and recipient balances
+            // Disable auto-commit to allow multiple statements to be executed as a single transaction
+            con.setAutoCommit(false);
+            try (PreparedStatement pstatement = con.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
+                pstatement.setDate(1, new Date(System.currentTimeMillis()));
+                pstatement.setFloat(2, amount);
+                pstatement.setInt(3, sender);
+                pstatement.setInt(4, recipient);
+                pstatement.setString(5, reason);
+                pstatement.executeUpdate();
+                try (ResultSet result = pstatement.getGeneratedKeys()) {
+                    if (!result.isBeforeFirst()) { // no results, transfer was not created
+                        return 0;
+                    } else {
+                        result.next();
+                        transferId = result.getInt(1);
+                    }
                 }
             }
-        }
-        // Update sender and recipient balances
-        // We pass the same connection as this DAO to ensure the update will be executed in the same transaction
-        AccountDAO accountDao = new AccountDAO(con);
-        accountDao.updateBalanceForTransfer(sender, recipient, amount);
+            // Update sender and recipient balances
+            // We pass the same connection as this DAO to ensure the update will be executed in the same transaction
+            AccountDAO accountDao = new AccountDAO(con);
+            accountDao.updateBalanceForTransfer(sender, recipient, amount);
 
-        // Commit the transaction
-        con.commit();
+            // Commit the transaction
+            con.commit();
+        } catch (SQLException e) {
+            // Rollback the transaction
+            con.rollback();
+            throw e;
+        } finally {
+            // Re-enable auto-commit to ensure future transactions on this connections are not affected
+            con.setAutoCommit(true);
+        }
         return transferId;
     }
 }
