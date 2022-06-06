@@ -41,7 +41,6 @@ public class Login extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         if (connection == null) {
-
             response.sendError(500, "Server connection unavailable");
             return;
         }
@@ -70,7 +69,7 @@ public class Login extends HttpServlet {
             final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
             ctx.setVariable("email", email);
             ctx.setVariable("errorMsg", "Incorrect username or password");
-            templateEngine.process("/index.html", ctx, response.getWriter());
+            templateEngine.process("../index.html", ctx, response.getWriter());
         } else {
             request.getSession().setAttribute("userid", user.getId());
             String path = getServletContext().getContextPath() + "/home";
