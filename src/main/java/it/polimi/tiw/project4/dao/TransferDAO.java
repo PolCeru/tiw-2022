@@ -15,7 +15,7 @@ public class TransferDAO {
     }
 
     public List<Transfer> getTransfers(int accountcode) throws SQLException {
-        String query = "SELECT ID, date, amount, sender, recipient " +
+        String query = "SELECT * " +
                 "FROM transfer JOIN account s on sender = s.userID " +
                 "JOIN account r on recipient = r.userID " +
                 "WHERE sender = ? OR recipient = ?";
@@ -34,6 +34,7 @@ public class TransferDAO {
                         transfer.setDate(result.getDate("date"));
                         transfer.setSender(result.getInt("sender"));
                         transfer.setRecipient(result.getInt("recipient"));
+                        transfer.setReason(result.getString("reason"));
                         userTransfers.add(transfer);
                     }
                     return userTransfers;
@@ -46,16 +47,57 @@ public class TransferDAO {
         return getTransfers(account.getCode());
     }
 
-    public void createTransfer(int sender, int recipient, String reason, float amount) throws SQLException {
-        String query = "INSERT INTO transfer (date, amount, sender, recipient, reason) VALUES (?, ?, ?, ?, ?)";
+    public Transfer getTransfer(int transferCode) throws SQLException {
+        String query = "SELECT * FROM transfer WHERE ID = ?";
         try (PreparedStatement pstatement = con.prepareStatement(query)) {
+            pstatement.setInt(1, transferCode);
+            try (ResultSet result = pstatement.executeQuery()) {
+                if (!result.isBeforeFirst()) { // no results, transfer does not exist
+                    return null;
+                } else {
+                    result.next();
+                    Transfer transfer = new Transfer();
+                    transfer.setTransferID(result.getInt("ID"));
+                    transfer.setAmount(result.getFloat("amount"));
+                    transfer.setDate(result.getDate("date"));
+                    transfer.setSender(result.getInt("sender"));
+                    transfer.setRecipient(result.getInt("recipient"));
+                    transfer.setReason(result.getString("reason"));
+                    return transfer;
+                }
+            }
+        }
+    }
+
+    public int createTransfer(int sender, int recipient, String reason, float amount) throws SQLException {
+        int transferId;
+        String query = "INSERT INTO transfer (date, amount, sender, recipient, reason) VALUES (?, ?, ?, ?, ?)";
+        // We need to create a new transfer entry and update the sender and recipient balances
+        // Disable auto-commit to allow multiple statements to be executed as a single transaction
+        con.setAutoCommit(false);
+        try (PreparedStatement pstatement = con.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
             pstatement.setDate(1, new Date(System.currentTimeMillis()));
             pstatement.setFloat(2, amount);
             pstatement.setInt(3, sender);
             pstatement.setInt(4, recipient);
             pstatement.setString(5, reason);
             pstatement.executeUpdate();
+            try (ResultSet result = pstatement.getGeneratedKeys()) {
+                if (!result.isBeforeFirst()) { // no results, transfer was not created
+                    return 0;
+                } else {
+                    result.next();
+                    transferId = result.getInt(1);
+                }
+            }
         }
-        // TODO: update sender and recipient balance with an atomic transaction
+        // Update sender and recipient balances
+        // We pass the same connection as this DAO to ensure the update will be executed in the same transaction
+        AccountDAO accountDao = new AccountDAO(con);
+        accountDao.updateBalanceForTransfer(sender, recipient, amount);
+
+        // Commit the transaction
+        con.commit();
+        return transferId;
     }
 }

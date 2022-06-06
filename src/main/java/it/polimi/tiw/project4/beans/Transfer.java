@@ -9,6 +9,7 @@ public class Transfer {
     private float amount;
     private int sender;
     private int recipient;
+    private String reason;
 
     public Transfer() {
     }
@@ -59,6 +60,14 @@ public class Transfer {
 
     public void setRecipient(int recipient) {
         this.recipient = recipient;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
     }
 
     @Override

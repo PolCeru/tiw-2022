@@ -76,4 +76,20 @@ public class AccountDAO {
             }
         }
     }
+
+    public void updateBalanceForTransfer(int sender, int recipient, float amount) throws SQLException {
+        String senderQuery = "UPDATE account SET balance = (balance - ?) WHERE code = ?";
+        try (PreparedStatement pstatement = con.prepareStatement(senderQuery)) {
+            pstatement.setFloat(1, amount);
+            pstatement.setInt(2, sender);
+            pstatement.executeUpdate();
+        }
+
+        String recipientQuery = "UPDATE account SET balance = (balance + ?) WHERE code = ?";
+        try (PreparedStatement pstatement = con.prepareStatement(recipientQuery)) {
+            pstatement.setFloat(1, amount);
+            pstatement.setInt(2, recipient);
+            pstatement.executeUpdate();
+        }
+    }
 }

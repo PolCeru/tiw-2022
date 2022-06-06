@@ -12,9 +12,12 @@
 </div>
 <div id="transfer-make">
     <h3>Transfer</h3>
-    <form action="transfer" method="POST">
+    <form action="do_transfer" method="POST">
+        <label>Recipient user code:
+            <input type="text" name="recipientCode" th:value="${recipientCode}" required>
+        </label><br>
         <label>Recipient account code:
-            <input type="text" name="accountCode" th:value="${accountCode}" required>
+            <input type="text" name="recipientAccountCode" th:value="${recipientAccountCode}" required>
         </label><br>
         <label>Reason:
             <input type="text" name="reason" th:value="${reason}" required>
