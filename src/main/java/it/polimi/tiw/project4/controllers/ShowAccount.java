@@ -36,26 +36,43 @@ public class ShowAccount extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
-        int accountCode;
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        int accountCode = 0;
+        Account account = null;
+        AccountDAO accountDao = new AccountDAO(connection);
         try {
             accountCode = Integer.parseInt(request.getParameter("code"));
-        } catch (NumberFormatException e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST,
-                    "Invalid account code: not a number");
-            return;
-        }
-
-        AccountDAO accountDao = new AccountDAO(connection);
-        Account account;
-        try {
             account = accountDao.getAccount(accountCode);
+        } catch (NumberFormatException ignored) {
         } catch (SQLException e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                     "Failed to retrieve the selected account");
             return;
         }
+
+        // Check that the requested account exists
+        if (account == null) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND,
+                    "The requested account does not exist");
+            return;
+        }
+
+        // Check that the requested account belongs to the user
+        int userId;
+        userId = (int) request.getSession().getAttribute("userid");
+        try {
+            if (!accountDao.getAccounts(userId).contains(account)) {
+                response.sendError(HttpServletResponse.SC_FORBIDDEN,
+                        "The requested account does not belong to the user");
+                return;
+            }
+        } catch (SQLException e) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                    "Failed to validate the user account");
+            return;
+        }
+
+        request.getSession().setAttribute("activeAccount", accountCode);
 
         TransferDAO transferDao = new TransferDAO(connection);
         List<Transfer> transferList;

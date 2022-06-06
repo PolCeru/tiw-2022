@@ -33,8 +33,7 @@ public class OpenAccount extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         int userid;
         try {
             userid = (int) request.getSession().getAttribute("userid");

@@ -35,8 +35,7 @@ public class SignUp extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         // Obtain and escape params
         String name = StringEscapeUtils.escapeJava(request.getParameter("name"));
         String surname = StringEscapeUtils.escapeJava(request.getParameter("surname"));

@@ -35,8 +35,7 @@ public class Login extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         // Obtain and escape params
         String email = StringEscapeUtils.escapeJava(request.getParameter("email"));
         String password = StringEscapeUtils.escapeJava(request.getParameter("password"));
