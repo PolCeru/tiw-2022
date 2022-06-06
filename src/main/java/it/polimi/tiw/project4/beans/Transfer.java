@@ -49,19 +49,19 @@ public class Transfer {
         this.amount = amount;
     }
 
-    public int getFrom() {
+    public int getSender() {
         return sender;
     }
 
-    public void setFrom(int sender) {
+    public void setSender(int sender) {
         this.sender = sender;
     }
 
-    public int getTo() {
+    public int getRecipient() {
         return recipient;
     }
 
-    public void setTo(int recipient) {
+    public void setRecipient(int recipient) {
         this.recipient = recipient;
     }
 }

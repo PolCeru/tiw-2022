@@ -40,7 +40,7 @@ public class UserDAO {
         try (PreparedStatement pstatement = con.prepareStatement(query)) {
             pstatement.setInt(1, userId);
             try (ResultSet result = pstatement.executeQuery()) {
-                if (!result.isBeforeFirst()) // no results, credential check failed
+                if (!result.isBeforeFirst()) // no results, the user doesn't exist
                     return null;
                 else {
                     result.next();

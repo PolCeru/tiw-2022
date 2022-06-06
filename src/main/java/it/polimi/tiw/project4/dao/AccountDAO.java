@@ -24,9 +24,9 @@ public class AccountDAO {
         try (PreparedStatement pstatement = con.prepareStatement(query)) {
             pstatement.setInt(1, userid);
             try (ResultSet result = pstatement.executeQuery()) {
-                if (!result.isBeforeFirst()) // no results, credential check failed
+                if (!result.isBeforeFirst()) { // no results, no accounts for this user
                     return null;
-                else {
+                } else {
                     ArrayList<Account> userAccounts = new ArrayList<>();
                     while (result.next()) {
                         Account account = new Account();
@@ -64,8 +64,8 @@ public class AccountDAO {
         try (PreparedStatement pstatement = con.prepareStatement(query)) {
             pstatement.setInt(1, code);
             try (ResultSet result = pstatement.executeQuery()) {
-                if (!result.isBeforeFirst()) // no results, credential check failed
-                    throw new SQLException();
+                if (!result.isBeforeFirst()) // no results, the account doesn't exist
+                    return null;
                 else {
                     result.next();
                     Account account = new Account();

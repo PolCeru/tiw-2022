@@ -23,8 +23,7 @@ public class TransferDAO {
             pstatement.setInt(1, accountcode);
             pstatement.setInt(2, accountcode);
             try (ResultSet result = pstatement.executeQuery()) {
-                if (!result.isBeforeFirst()) {
-                    // no results, credential check failed
+                if (!result.isBeforeFirst()) { // no results, no transfers for this account
                     return null;
                 } else {
                     ArrayList<Transfer> userTransfers = new ArrayList<>();
@@ -33,8 +32,8 @@ public class TransferDAO {
                         transfer.setTransferID(result.getInt("ID"));
                         transfer.setAmount(result.getFloat("amount"));
                         transfer.setDate(result.getDate("date"));
-                        transfer.setFrom(result.getInt("from"));
-                        transfer.setTo(result.getInt("to"));
+                        transfer.setSender(result.getInt("sender"));
+                        transfer.setRecipient(result.getInt("recipient"));
                         userTransfers.add(transfer);
                     }
                     return userTransfers;
