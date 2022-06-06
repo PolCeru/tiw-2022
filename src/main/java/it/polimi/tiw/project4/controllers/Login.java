@@ -9,7 +9,7 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 
 import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
+import javax.servlet.UnavailableException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -28,14 +28,23 @@ public class Login extends HttpServlet {
     }
 
     @Override
-    public void init() throws ServletException {
+    public void init() {
         ServletContext servletContext = getServletContext();
-        this.connection = ConnectionHandler.getConnection(servletContext);
-        this.templateEngine = TemplateEngineHandler.getEngine(servletContext);
+        try {
+            connection = ConnectionHandler.getConnection(servletContext);
+        } catch (UnavailableException e) {
+            connection = null;
+        }
+        templateEngine = TemplateEngineHandler.getEngine(servletContext);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        if (connection == null) {
+
+            response.sendError(500, "Server connection unavailable");
+            return;
+        }
         // Obtain and escape params
         String email = StringEscapeUtils.escapeJava(request.getParameter("email"));
         String password = StringEscapeUtils.escapeJava(request.getParameter("password"));
