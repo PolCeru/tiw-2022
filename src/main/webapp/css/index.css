@@ -1,0 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+.wrapper {
+    position: fixed;
+    height: 100%;
+    width: 50%;
+}
+
+#rightWrapper {
+    left: 50%;
+}
+
+#vl {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    border: 1px solid #243b53;
+    height: 700px;
+    top: 50%;
+    left: 50%;
+}
+
+.form {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    padding: 50px;
+    border-radius: 12px;
+    background-color: white;
+}

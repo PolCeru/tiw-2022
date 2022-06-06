@@ -1,0 +1,33 @@
+#vl {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    border: 1px solid #243b53;
+    height: 700px;
+    top: 50%;
+    left: 50%;
+}
+
+.leftWrapper {
+    position: fixed;
+    height: 25%;
+    width: 50%;
+}
+
+#bottomWrapper {
+    top: 50%;
+    height: 340px;
+}
+
+#rightWrapper {
+    left: 50%;
+}
+
+.content {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    padding: 50px;
+    border-radius: 12px;
+    background-color: white;
+}

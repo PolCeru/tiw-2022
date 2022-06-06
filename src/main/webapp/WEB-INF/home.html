@@ -1,25 +1,39 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <title>Homepage</title>
+    <link rel="stylesheet" type="text/css" media="all" href="css/generic.css"/>
+    <link rel="stylesheet" type="text/css" media="all" href="css/home.css"/>
 </head>
 <body>
-<h1 th:text="${'Welcome back, ' + name + '!'}">Welcome back!</h1>
-<div class="account-list">
-    <ul th:each="account: ${accounts}">
-        <li><a th:text="${account.code}" th:href="@{/account(code=${account.code})}">code</a></li>
-    </ul>
+<div id="header">
+    <h1 th:text="${'Welcome back, ' + name + '!'}">Welcome back!</h1>
 </div>
-<div id="open-account">
-    <h3>Open a new account</h3>
-    <form action="account/open" method="POST">
-        <label>Initial balance:
-            <input type="number" step="0.01" name="balance" th:value="${balance}" required>
-        </label><br>
-        <input type="submit" value="Open">
-        <p th:text="${errorMsg}"></p>
-    </form>
+<div id="page">
+    <div class="wrapper">
+        <div class="content">
+            <h2>Your account/s</h2>
+            <ul th:each="account: ${accounts}">
+                <li><a th:text="${account.code}" th:href="@{/account(code=${account.code})}">code</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="hl"></div>
+
+    <div class="wrapper" id="lowerWrapper">
+        <div class="content">
+            <h2>Open a new account</h2>
+            <form action="account/open" method="POST">
+                <label>Initial balance:
+                    <input type="number" step="0.01" name="balance" th:value="${balance}" required>
+                </label><br>
+                <input class="sendButton" type="submit" value="Open">
+                <p th:text="${errorMsg}"></p>
+            </form>
+        </div>
+    </div>
 </div>
 </body>
 </html>
