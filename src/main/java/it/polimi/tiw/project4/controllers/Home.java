@@ -37,8 +37,7 @@ public class Home extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         int currentUser = (int) request.getSession().getAttribute("currentUser");
         UserDAO userDao = new UserDAO(connection);
         User user;

@@ -8,7 +8,6 @@ import it.polimi.tiw.project4.dao.UserDAO;
 import it.polimi.tiw.project4.utils.ConnectionHandler;
 import org.apache.commons.text.StringEscapeUtils;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
