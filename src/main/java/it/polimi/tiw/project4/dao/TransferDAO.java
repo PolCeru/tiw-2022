@@ -16,8 +16,8 @@ public class TransferDAO {
 
     public List<Transfer> getTransfers(int accountcode) throws SQLException {
         String query = "SELECT * " +
-                "FROM transfer JOIN account s on sender = s.userID " +
-                "JOIN account r on recipient = r.userID " +
+                "FROM transfer JOIN account s on sender = s.code " +
+                "JOIN account r on recipient = r.code " +
                 "WHERE sender = ? OR recipient = ? " +
                 "ORDER BY date DESC";
         try (PreparedStatement pstatement = con.prepareStatement(query)) {
