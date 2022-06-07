@@ -39,11 +39,11 @@ public class Home extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
-        int userId = (int) request.getSession().getAttribute("userid");
+        int currentUser = (int) request.getSession().getAttribute("currentUser");
         UserDAO userDao = new UserDAO(connection);
         User user;
         try {
-            user = userDao.getUser(userId);
+            user = userDao.getUser(currentUser);
         } catch (SQLException e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to retrieve user info");
             return;
@@ -52,7 +52,7 @@ public class Home extends HttpServlet {
         AccountDAO accountDao = new AccountDAO(connection);
         List<Account> userAccounts;
         try {
-            userAccounts = accountDao.getAccounts(userId);
+            userAccounts = accountDao.getAccounts(currentUser);
         } catch (SQLException e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to retrieve user's accounts");
             return;

@@ -77,6 +77,9 @@ public class AccountDAO {
         }
     }
 
+    /**
+     * @apiNote Auto-commit should be disabled before calling this method to guarantee transaction atomicity.
+     */
     public void updateBalanceForTransfer(int sender, int recipient, float amount) throws SQLException {
         String senderQuery = "UPDATE account SET balance = (balance - ?) WHERE code = ?";
         try (PreparedStatement pstatement = con.prepareStatement(senderQuery)) {

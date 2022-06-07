@@ -71,7 +71,7 @@ public class Login extends HttpServlet {
             ctx.setVariable("errorMsg", "Incorrect username or password");
             templateEngine.process("../index.html", ctx, response.getWriter());
         } else {
-            request.getSession().setAttribute("userid", user.getId());
+            request.getSession().setAttribute("currentUser", user.getId());
             String path = getServletContext().getContextPath() + "/home";
             response.sendRedirect(path);
         }

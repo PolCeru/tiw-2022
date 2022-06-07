@@ -58,10 +58,9 @@ public class ShowAccount extends HttpServlet {
         }
 
         // Check that the requested account belongs to the user
-        int userId;
-        userId = (int) request.getSession().getAttribute("userid");
+        int currentUser = (int) request.getSession().getAttribute("currentUser");
         try {
-            if (!accountDao.getAccounts(userId).contains(account)) {
+            if (!accountDao.getAccounts(currentUser).contains(account)) {
                 response.sendError(HttpServletResponse.SC_FORBIDDEN,
                         "The requested account does not belong to the user");
                 return;
