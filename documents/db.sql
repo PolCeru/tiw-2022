@@ -54,8 +54,8 @@ CREATE TABLE transfer
     `sender`    int             NOT NULL,
     `recipient` int             NOT NULL,
     `reason`    varchar(150)    NOT NULL,
-    FOREIGN KEY `transfer` (sender) REFERENCES `account` (userID) ON UPDATE CASCADE ON DELETE NO ACTION,
-    FOREIGN KEY `transfer` (sender) REFERENCES `account` (userID) ON UPDATE CASCADE ON DELETE NO ACTION
+    FOREIGN KEY `transfer` (sender) REFERENCES `account` (code) ON UPDATE CASCADE ON DELETE NO ACTION,
+    FOREIGN KEY `transfer` (recipient) REFERENCES `account` (code) ON UPDATE CASCADE ON DELETE NO ACTION
 ) DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;
 
