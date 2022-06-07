@@ -34,14 +34,7 @@ public class OpenAccount extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        int userid;
-        try {
-            userid = (int) request.getSession().getAttribute("userid");
-        } catch (NullPointerException e) {
-            // If we catch a NPE, it means that the user is not logged in
-            response.sendError(HttpServletResponse.SC_FORBIDDEN, "User is not authenticated");
-            return;
-        }
+        int userid = (int) request.getSession().getAttribute("userid");
 
         float initialBalance;
         try {
