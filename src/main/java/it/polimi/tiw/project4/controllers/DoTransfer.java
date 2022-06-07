@@ -39,14 +39,7 @@ public class DoTransfer extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         // Get the sender account code from the session
-        int senderAccountCode;
-        try {
-            senderAccountCode = (int) request.getSession().getAttribute("activeAccount");
-        } catch (NullPointerException e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST,
-                    "Invalid account code");
-            return;
-        }
+        int senderAccountCode = (int) request.getSession().getAttribute("activeAccount");
 
         // Obtain and escape params
         String recipientCodeString = StringEscapeUtils.escapeJava(request.getParameter("recipientAccountCode"));
