@@ -12,47 +12,43 @@
     <h1>Welcome to the Bank Application!</h1>
 </div>
 <div id="page">
-    <div class="wrapper">
-        <div class="form">
-            <h1>Login</h1>
-            <form action="login" method="POST">
-                <label>Email:
-                    <input type="text" name="email" th:value="${email}" required>
-                </label><br>
-                <label>Password:
-                    <input type="password" name="password" required>
-                </label><br>
-                <input class="sendButton" type="submit" value="Login">
-                <p th:text="${errorMsg}"></p>
-            </form>
-        </div>
+    <div class="form">
+        <h1>Login</h1>
+        <form action="login" method="POST">
+            <label>Email:
+                <input type="text" name="email" th:value="${email}" required>
+            </label><br>
+            <label>Password:
+                <input type="password" name="password" required>
+            </label><br>
+            <input class="sendButton" type="submit" value="Login">
+            <p class="error" th:text="${errorMsg}"></p>
+        </form>
     </div>
 
     <div id="vl"></div>
 
-    <div class="wrapper" id="rightWrapper">
-        <div class="form">
-            <h1>Sign Up</h1>
-            <form action="signup" method="POST">
-                <label>Email:
-                    <input type="text" name="email" th:value="${emailSignup}" required>
-                </label><br>
-                <label>Name:
-                    <input type="text" name="name" th:value="${nameSignup}" required>
-                </label><br>
-                <label>Surname:
-                    <input type="text" name="surname" th:value="${surnameSignup}" required>
-                </label><br>
-                <label>Password:
-                    <input type="password" name="password" required>
-                </label><br>
-                <label>Confirm Password:
-                    <input type="password" name="confirmPassword" required>
-                </label><br>
-                <input class="sendButton" type="submit" value="SignUp">
-                <p th:text="${errorMsgSignup}"></p>
-            </form>
-        </div>
+    <div class="form">
+        <h1>Sign Up</h1>
+        <form action="signup" method="POST">
+            <label>Email:
+                <input type="text" name="email" th:value="${emailSignup}" required>
+            </label><br>
+            <label>Name:
+                <input type="text" name="name" th:value="${nameSignup}" required>
+            </label><br>
+            <label>Surname:
+                <input type="text" name="surname" th:value="${surnameSignup}" required>
+            </label><br>
+            <label>Password:
+                <input type="password" name="password" required>
+            </label><br>
+            <label>Confirm Password:
+                <input type="password" name="confirmPassword" required>
+            </label><br>
+            <input class="sendButton" type="submit" value="SignUp">
+            <p class="error" th:text="${msgSignup}"></p>
+        </form>
     </div>
 </div>
 </body>

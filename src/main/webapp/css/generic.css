@@ -1,35 +1,38 @@
-body {
-    margin: 0;
-}
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
 html {
     background-color: #dfdfdf;
     font-family: "Inter", sans-serif;
-    font-size: 14px;
+    font-size: 15px;
+}
+
+body {
+    margin: 0;
 }
 
 #page {
-    position: absolute;
-    height: 91%;
-    width: 100%;
+    display: flex;
+    margin-top: 6em;
+    gap: 15em;
+    justify-content: center;
 }
 
-
 #header {
-    position: relative;
-    left: 50%;
-    transform: translate(-50%);
+    margin: auto;
+    display: flex;
     background-color: #243b53;
     text-align: center;
-    width: 90%;
+    width: 75%;
     border-bottom-left-radius: 100px;
     border-bottom-right-radius: 100px;
+    justify-content: space-around;
+    align-items: center;
 }
 
 #header h1 {
-    margin: 0;
     padding: 1%;
     color: #dfdfdf;
+    margin: 0;
 }
 
 .sendButton {
@@ -56,11 +59,55 @@ html {
     background-color: #334e68;
 }
 
+.content {
+    padding: 50px;
+    border-radius: 8px;
+    background-color: white;
+}
+
+.error {
+    color: #FF3333;
+    margin-top: 20px;
+    font-weight: 700;
+    text-align: center;
+}
+
 input {
     width: 100%;
     height: 40px;
     border-radius: 8px;
-    border: 1px solid #868686;
+    border: 0;
+    background-color: #d8d8d8;
     padding-left: 10px;
     margin-bottom: 10px;
+    outline: none;
+}
+
+#logout {
+    width: 100px;
+    font-size: 1.4em;
+    padding: 30px 0;
+}
+
+#back {
+    width: 100px;
+    font-size: 3.5em;
+}
+
+#logout a, #logout a:link, #logout a:visited, #back a, #back a:link, #back a:visited {
+    color: #dfdfdf;
+    text-decoration: none;
+}
+
+#logout a:hover, #back a:hover {
+    color: #afafaf;
+}
+
+#logout a:active, #back a:active {
+    color: #ffffff;
+}
+
+#vl {
+    border: 1px solid #b8b8b8;
+    height: 700px;
 }

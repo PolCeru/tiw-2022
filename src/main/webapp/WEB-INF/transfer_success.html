@@ -1,32 +1,56 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" type="text/css" media="all" href="css/generic.css"/>
+    <link rel="stylesheet" type="text/css" media="all" href="css/transfer.css"/>
     <title>Transfer confirmation</title>
 </head>
 <body>
 <div>
-    <h1 th:text="${'Transfer n. ' + transferCode}">Transfer confirmation</h1>
-    <div class="transfer-details">
-        <p th:text="${transferCode}">code</p>
-        <span th:text="${'$ ' + amount}">amount</span>
-        <span th:text="${reason}">reason</span>
-        <span th:text="${date}">date</span>
+    <div id="header">
+        <div id="back">
+            <a th:href="@{/${backButton}}">
+                <span id="backButton">&#11176;</span>
+            </a>
+        </div>
+        <h1 th:text="${'Account n. ' + accountID}">Account Page</h1>
+        <div id="logout">
+            <a th:href="@{/Logout}">Logout</a>
+        </div>
     </div>
-    <div class="sender-details">
-        <h2>Sender</h2>
-        <span th:text="${'User code ' + senderUserCode}">senderUserCode</span>
-        <span th:text="${'Account code ' + senderAccountCode}">senderAccountCode</span>
-        <span th:text="${'Balance before transfer ' + senderBalanceBefore}">senderAccountBalanceBefore</span>
-        <span th:text="${'Balance after transfer ' + senderBalanceAfter}">senderAccountBalanceAfter</span>
+    <div id="page">
+        <div class="content">
+            <div class="upperWrapper">
+                <h1 th:text="${'Transfer n. ' + transferCode}">Transfer confirmation</h1>
+                <div class="transfer-details">
+                    <p th:text="${transferCode}">code</p>
+                    <p th:text="${'$ ' + amount}">amount</p>
+                    <p th:text="${reason}">reason</p>
+                    <p th:text="${date}">date</p>
+                </div>
+            </div>
+            <div class="lowerWrapper">
+                <div class="sender-details">
+                    <h2>Sender</h2>
+                    <p th:text="${'User code ' + senderUserCode}">senderUserCode</p>
+                    <p th:text="${'Account code ' + senderAccountCode}">senderAccountCode</p>
+                    <p th:text="${'Balance before transfer ' + senderBalanceBefore}">senderAccountBalanceBefore</p>
+                    <p th:text="${'Balance after transfer ' + senderBalanceAfter}">senderAccountBalanceAfter</p>
+                </div>
+                <div id="vl"></div>
+                <div class="recipient-details">
+                    <h2>Recipient</h2>
+                    <p th:text="${'User code ' + recipientUserCode}">recipientUserCode</p>
+                    <p th:text="${'Account code ' + recipientAccountCode}">recipientAccountCode</p>
+                    <p th:text="${'Balance before transfer ' + recipientBalanceBefore}">
+                        recipientAccountBalanceBefore</p>
+                    <p th:text="${'Balance after transfer ' + recipientBalanceAfter}">recipientAccountBalanceAfter</p>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="recipient-details">
-        <h2>Recipient</h2>
-        <span th:text="${'User code ' + recipientUserCode}">recipientUserCode</span>
-        <span th:text="${'Account code ' + recipientAccountCode}">recipientAccountCode</span>
-        <span th:text="${'Balance before transfer ' + recipientBalanceBefore}">recipientAccountBalanceBefore</span>
-        <span th:text="${'Balance after transfer ' + recipientBalanceAfter}">recipientAccountBalanceAfter</span>
-    </div>
+
 </div>
 </body>
 </html>
