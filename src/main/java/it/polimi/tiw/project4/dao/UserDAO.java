@@ -35,6 +35,17 @@ public class UserDAO {
         }
     }
 
+    public boolean userExists(String email) throws SQLException {
+        String query = "SELECT * FROM user WHERE email = ?";
+        try (PreparedStatement pstatement = con.prepareStatement(query)) {
+            pstatement.setString(1, email);
+            try (ResultSet result = pstatement.executeQuery()) {
+                // no results, credential check failed
+                return result.isBeforeFirst();
+            }
+        }
+    }
+
     public User getUser(int userId) throws SQLException {
         String query = "SELECT userID, email, name, surname FROM user WHERE userID = ?";
         try (PreparedStatement pstatement = con.prepareStatement(query)) {

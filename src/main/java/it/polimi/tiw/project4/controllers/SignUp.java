@@ -1,6 +1,5 @@
 package it.polimi.tiw.project4.controllers;
 
-import it.polimi.tiw.project4.beans.User;
 import it.polimi.tiw.project4.dao.UserDAO;
 import it.polimi.tiw.project4.utils.ConnectionHandler;
 import it.polimi.tiw.project4.utils.TemplateEngineHandler;
@@ -37,11 +36,12 @@ public class SignUp extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         // Obtain and escape params
-        String name = StringEscapeUtils.escapeJava(request.getParameter("name"));
-        String surname = StringEscapeUtils.escapeJava(request.getParameter("surname"));
-        String email = StringEscapeUtils.escapeJava(request.getParameter("email"));
-        String password = StringEscapeUtils.escapeJava(request.getParameter("password"));
-        String confirmPassword = StringEscapeUtils.escapeJava(request.getParameter("confirmPassword"));
+        final String name = StringEscapeUtils.escapeJava(request.getParameter("name"));
+        final String surname = StringEscapeUtils.escapeJava(request.getParameter("surname"));
+        final String email = StringEscapeUtils.escapeJava(request.getParameter("email"));
+        final String password = StringEscapeUtils.escapeJava(request.getParameter("password"));
+        final String confirmPassword = StringEscapeUtils.escapeJava(request.getParameter("confirmPassword"));
+        final String redirectPath = "../index.html";
 
         if (name == null || surname == null || email == null || password == null || confirmPassword == null ||
                 name.isBlank() || surname.isBlank() || email.isBlank() || password.isBlank() || confirmPassword.isBlank()) {
@@ -55,8 +55,8 @@ public class SignUp extends HttpServlet {
             final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
             ctx.setVariable("nameSignup", name);
             ctx.setVariable("surnameSignup", surname);
-            ctx.setVariable("errorMsgSignup", "Invalid email address");
-            templateEngine.process("/index.html", ctx, response.getWriter());
+            ctx.setVariable("msgSignup", "Invalid email address");
+            templateEngine.process(redirectPath, ctx, response.getWriter());
             return;
         }
         if (!password.equals(confirmPassword)) {
@@ -65,29 +65,25 @@ public class SignUp extends HttpServlet {
             ctx.setVariable("emailSignup", email);
             ctx.setVariable("nameSignup", name);
             ctx.setVariable("surnameSignup", surname);
-            ctx.setVariable("errorMsgSignup", "Passwords did not match");
-            templateEngine.process("/index.html", ctx, response.getWriter());
+            ctx.setVariable("msgSignup", "Passwords did not match");
+            templateEngine.process(redirectPath, ctx, response.getWriter());
             return;
         }
 
         // Query DB to check if the user already exists
         UserDAO userDao = new UserDAO(connection);
         try {
-            String path;
-            User user = userDao.getUser(email, password);
-
+            ServletContext servletContext = getServletContext();
+            final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
             // If the user exists, show the signup page with an error message
             // Otherwise, create a user and an associated account and return to the login page
-            if (user == null) {
+            if (!userDao.userExists(email)) {
                 userDao.createUser(name, surname, email, password);
-                path = getServletContext().getContextPath() + "/index.html";
-                response.sendRedirect(path);
+                ctx.setVariable("msgSignup", "User created successfully");
+                templateEngine.process(redirectPath, ctx, response.getWriter());
             } else {
-                ServletContext servletContext = getServletContext();
-                final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
-                ctx.setVariable("errorMsgSignup", "Incorrect username or password");
-                path = "/index.html";
-                templateEngine.process(path, ctx, response.getWriter());
+                ctx.setVariable("msgSignup", "A user already exists with this email address");
+                templateEngine.process(redirectPath, ctx, response.getWriter());
             }
         } catch (SQLException e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to create a new user");
