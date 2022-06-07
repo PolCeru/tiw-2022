@@ -61,7 +61,6 @@ public class Home extends HttpServlet {
         final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
         ctx.setVariable("name", user.getName());
         ctx.setVariable("accounts", userAccounts);
-
         templateEngine.process("/home.html", ctx, response.getWriter());
     }
 

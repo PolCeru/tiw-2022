@@ -51,7 +51,7 @@ public class TransferResult extends HttpServlet {
 
         ServletContext servletContext = getServletContext();
         final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
-        ctx.setVariable("backButton", "/account?code=" + (int) request.getSession().getAttribute("activeAccount"));
+        ctx.setVariable("backButton", ctx.getServletContext().getContextPath() + "/account?code=" + request.getSession().getAttribute("activeAccount"));
         switch (transferStatus) {
             case SUCCESS -> {
                 TransferDAO transferDao = new TransferDAO(connection);
