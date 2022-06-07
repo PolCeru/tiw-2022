@@ -88,6 +88,7 @@ public class ShowAccount extends HttpServlet {
         ctx.setVariable("accountID", account.getCode());
         ctx.setVariable("balance", account.getBalance());
         ctx.setVariable("transfers", transferList);
+        ctx.setVariable("backButton", "/home");
         templateEngine.process("/account.html", ctx, response.getWriter());
     }
 
