@@ -34,7 +34,7 @@ public class OpenAccount extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        int userid = (int) request.getSession().getAttribute("userid");
+        int currentUser = (int) request.getSession().getAttribute("currentUser");
 
         float initialBalance;
         try {
@@ -47,7 +47,7 @@ public class OpenAccount extends HttpServlet {
 
         AccountDAO accountDao = new AccountDAO(connection);
         try {
-            accountDao.createAccount(userid, initialBalance);
+            accountDao.createAccount(currentUser, initialBalance);
         } catch (SQLException e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to create the requested account");
             return;

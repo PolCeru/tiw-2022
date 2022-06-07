@@ -15,7 +15,7 @@ public class NotLoggedInFilter implements Filter {
         HttpServletResponse res = (HttpServletResponse) response;
         HttpSession s = req.getSession(false);
 
-        if (s == null || s.getAttribute("userid") == null) {
+        if (s == null || s.getAttribute("currentUser") == null) {
             res.sendRedirect(request.getServletContext().getContextPath() + "/");
             return;
         }

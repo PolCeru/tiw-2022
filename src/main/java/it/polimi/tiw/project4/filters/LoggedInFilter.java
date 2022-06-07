@@ -16,7 +16,7 @@ public class LoggedInFilter implements Filter {
         HttpSession s = req.getSession(false);
 
         if (s != null) {
-            Object user = s.getAttribute("userid");
+            Object user = s.getAttribute("currentUser");
             if (user != null) {
                 res.sendRedirect(request.getServletContext().getContextPath() + "/home");
                 return;
