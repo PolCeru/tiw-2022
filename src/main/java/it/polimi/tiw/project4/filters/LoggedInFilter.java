@@ -1,6 +1,7 @@
 package it.polimi.tiw.project4.filters;
 
 import javax.servlet.*;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -9,6 +10,11 @@ import java.io.IOException;
 /**
  * This filter checks if the user is logged in and redirects to the home page.
  */
+@WebFilter(urlPatterns = {
+        "/index.html",
+        "/login",
+        "/signup",
+})
 public class LoggedInFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;

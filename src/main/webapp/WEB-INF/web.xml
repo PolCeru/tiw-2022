@@ -23,36 +23,4 @@
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>
-
-    <filter>
-        <filter-name>LoggedInFilter</filter-name>
-        <filter-class>it.polimi.tiw.project4.filters.LoggedInFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>LoggedInFilter</filter-name>
-        <url-pattern>/index.html</url-pattern>
-        <url-pattern>/login</url-pattern>
-        <url-pattern>/signup</url-pattern>
-    </filter-mapping>
-
-    <filter>
-        <filter-name>NotLoggedInFilter</filter-name>
-        <filter-class>it.polimi.tiw.project4.filters.NotLoggedInFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>NotLoggedInFilter</filter-name>
-        <url-pattern>/home</url-pattern>
-        <url-pattern>/account</url-pattern>
-        <url-pattern>/do_transfer</url-pattern>
-        <url-pattern>/transfer</url-pattern>
-    </filter-mapping>
-
-    <filter>
-        <filter-name>NoActiveAccountFilter</filter-name>
-        <filter-class>it.polimi.tiw.project4.filters.NoActiveAccountFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>NoActiveAccountFilter</filter-name>
-        <url-pattern>/transfer</url-pattern>
-    </filter-mapping>
 </web-app>
