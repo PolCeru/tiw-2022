@@ -19,7 +19,7 @@ public class AccountDAO {
 
     public List<Account> getAccounts(int userid) throws SQLException {
         String query = "SELECT code, balance " +
-                "FROM account NATURAL JOIN user " +
+                "FROM account " +
                 "WHERE userID = ?";
         try (PreparedStatement pstatement = con.prepareStatement(query)) {
             pstatement.setInt(1, userid);
@@ -58,7 +58,7 @@ public class AccountDAO {
     }
 
     public Account getAccount(int code) throws SQLException {
-        String query = "SELECT code, balance " +
+        String query = "SELECT code, userID, balance " +
                 "FROM account " +
                 "WHERE code = ?";
         try (PreparedStatement pstatement = con.prepareStatement(query)) {
@@ -70,6 +70,29 @@ public class AccountDAO {
                     result.next();
                     Account account = new Account();
                     account.setCode(result.getInt("code"));
+                    account.setUserID(result.getInt("userID"));
+                    account.setBalance(result.getFloat("balance"));
+                    return account;
+                }
+            }
+        }
+    }
+
+    public Account getAccountFromUserID(int code, int userID) throws SQLException {
+        String query = "SELECT code, userID, balance " +
+                "FROM account " +
+                "WHERE code = ? AND userID = ?";
+        try (PreparedStatement pstatement = con.prepareStatement(query)) {
+            pstatement.setInt(1, code);
+            pstatement.setInt(2, userID);
+            try (ResultSet result = pstatement.executeQuery()) {
+                if (!result.isBeforeFirst()) // no results, the account doesn't exist
+                    return null;
+                else {
+                    result.next();
+                    Account account = new Account();
+                    account.setCode(result.getInt("code"));
+                    account.setUserID(result.getInt("userID"));
                     account.setBalance(result.getFloat("balance"));
                     return account;
                 }

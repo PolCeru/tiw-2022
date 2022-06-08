@@ -73,10 +73,10 @@ public class TransferResult extends HttpServlet {
                 User sender, recipient;
                 Account senderAccount, recipientAccount;
                 try {
-                    sender = userDao.getUser(transfer.getSender());
-                    recipient = userDao.getUser(transfer.getRecipient());
                     senderAccount = accountDao.getAccount(transfer.getSender());
                     recipientAccount = accountDao.getAccount(transfer.getRecipient());
+                    sender = userDao.getUser(senderAccount.getUserID());
+                    recipient = userDao.getUser(recipientAccount.getUserID());
                 } catch (SQLException e) {
                     response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to retrieve the requested transfer details");
                     return;

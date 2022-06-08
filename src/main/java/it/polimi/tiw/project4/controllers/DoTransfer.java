@@ -71,22 +71,28 @@ public class DoTransfer extends HttpServlet {
             }
 
             // Check that the recipient account exists
-            Account recipientAccount = accountDao.getAccount(recipientAccountCode);
+            Account recipientAccount = accountDao.getAccountFromUserID(recipientAccountCode, recipient.getId());
             if (recipientAccount == null) {
                 String path = getServletContext().getContextPath() + "/transfer?result=error&code=" + NON_EXISTANT_RECIPIENT_ACCOUNT.ordinal();
                 response.sendRedirect(path);
                 return;
             }
-
             // Check that the recipient is not the same as the sender
-            if (senderAccountCode == recipientAccountCode) {
+            Account senderAccount = accountDao.getAccount(senderAccountCode);
+            if (recipientCode == senderAccount.getCode() && senderAccountCode == recipientAccountCode) {
                 String path = getServletContext().getContextPath() + "/transfer?result=error&code=" + RECIPIENT_SAME_AS_SENDER.ordinal();
                 response.sendRedirect(path);
                 return;
             }
 
+            // Check that the amount is not negative
+            if (amount < 0) {
+                String path = getServletContext().getContextPath() + "/transfer?result=error&code=" + NEGATIVE_AMOUNT.ordinal();
+                response.sendRedirect(path);
+                return;
+            }
+
             // Check that the sender has enough money
-            Account senderAccount = accountDao.getAccount(senderAccountCode);
             if (senderAccount.getBalance() < amount) {
                 String path = getServletContext().getContextPath() + "/transfer?result=error&code=" + INSUFFICIENT_FUNDS.ordinal();
                 response.sendRedirect(path);

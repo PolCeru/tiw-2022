@@ -31,8 +31,8 @@ public class TransferDAO {
                     while (result.next()) {
                         Transfer transfer = new Transfer();
                         transfer.setTransferID(result.getInt("ID"));
-                        transfer.setAmount(result.getFloat("amount"));
                         transfer.setDate(result.getDate("date"));
+                        transfer.setAmount(result.getFloat("amount"));
                         transfer.setSender(result.getInt("sender"));
                         transfer.setRecipient(result.getInt("recipient"));
                         transfer.setReason(result.getString("reason"));
@@ -59,8 +59,8 @@ public class TransferDAO {
                     result.next();
                     Transfer transfer = new Transfer();
                     transfer.setTransferID(result.getInt("ID"));
-                    transfer.setAmount(result.getFloat("amount"));
                     transfer.setDate(result.getDate("date"));
+                    transfer.setAmount(result.getFloat("amount"));
                     transfer.setSender(result.getInt("sender"));
                     transfer.setRecipient(result.getInt("recipient"));
                     transfer.setReason(result.getString("reason"));

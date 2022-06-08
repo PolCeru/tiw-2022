@@ -5,6 +5,7 @@ import it.polimi.tiw.project4.utils.ConnectionHandler;
 import it.polimi.tiw.project4.utils.TemplateEngineHandler;
 import org.apache.commons.text.StringEscapeUtils;
 import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.WebContext;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -34,14 +35,25 @@ public class OpenAccount extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        ServletContext servletContext = getServletContext();
+        final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
         int currentUser = (int) request.getSession().getAttribute("currentUser");
 
         float initialBalance;
         try {
             initialBalance = Float.parseFloat(StringEscapeUtils.escapeJava(request.getParameter("balance")));
         } catch (NumberFormatException e) {
-            // TODO: use form error message field instead of sending BAD_REQUEST
+            /*ctx.setVariable("errorMsg", "Invalid initial balance, not a number");
+            templateEngine.process("../home.html", ctx, response.getWriter());*/
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid initial balance provided: not a number");
+            return;
+        }
+
+        //Checks if balance is positive
+        if (initialBalance < 0) {
+            /*ctx.setVariable("errorMsg", "Invalid initial balance, not positive");
+            templateEngine.process("../home.html", ctx, response.getWriter());*/
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid initial balance provided: negative number");
             return;
         }
 
