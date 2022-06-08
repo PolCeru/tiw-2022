@@ -41,7 +41,7 @@ public class DoTransfer extends HttpServlet {
         int senderAccountCode = (int) request.getSession().getAttribute("activeAccount");
 
         // Obtain and escape params
-        String recipientCodeString = StringEscapeUtils.escapeJava(request.getParameter("recipientAccountCode"));
+        String recipientCodeString = StringEscapeUtils.escapeJava(request.getParameter("recipientCode"));
         String recipientAccountCodeString = StringEscapeUtils.escapeJava(request.getParameter("recipientAccountCode"));
         String reasonString = StringEscapeUtils.escapeJava(request.getParameter("reason"));
         String amountString = StringEscapeUtils.escapeJava(request.getParameter("amount"));
