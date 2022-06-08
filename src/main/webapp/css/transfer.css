@@ -20,3 +20,7 @@
 #vl {
     height: 200px;
 }
+
+#page {
+    justify-content: center;
+}

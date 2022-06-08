@@ -12,9 +12,9 @@ body {
 
 #page {
     display: flex;
-    margin-top: 6em;
-    gap: 15em;
-    justify-content: center;
+    margin-top: 1.6em;
+    gap: 12em;
+    flex-direction: row;
 }
 
 #header {
@@ -63,6 +63,7 @@ body {
     padding: 50px;
     border-radius: 8px;
     background-color: white;
+    box-shadow: 0 0 20px rgb(0 0 0 / 15%);
 }
 
 .error {
@@ -81,6 +82,7 @@ input {
     padding-left: 10px;
     margin-bottom: 10px;
     outline: none;
+    box-sizing: border-box;
 }
 
 #logout {
@@ -109,5 +111,5 @@ input {
 
 #vl {
     border: 1px solid #b8b8b8;
-    height: 700px;
+    height: 800px;
 }
