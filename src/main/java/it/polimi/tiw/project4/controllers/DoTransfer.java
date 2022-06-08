@@ -20,7 +20,6 @@ import java.sql.SQLException;
 
 import static it.polimi.tiw.project4.controllers.TransferErrorMessage.*;
 
-
 @WebServlet("/do_transfer")
 public class DoTransfer extends HttpServlet {
     private Connection connection = null;
