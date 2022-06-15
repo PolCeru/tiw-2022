@@ -66,3 +66,24 @@ CREATE TABLE transfer
 INSERT INTO transfer (date, amount, sender, recipient, reason)
 VALUES 	('2022-05-25', 30.22, 1, 2, 'dinner'), 
 		('2022-06-15', 100, 1, 3, 'moving money to prepaid card');
+
+--
+-- Table structure for table `account_book`
+--
+DROP TABLE IF EXISTS account_book;
+CREATE TABLE account_book
+(
+    `userID`		int NOT NULL PRIMARY KEY,
+    `savedCode`		int	NOT NULL,
+    `name`     		varchar(45) NOT NULL,
+    FOREIGN KEY (userID) REFERENCES `user` (userID) ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY accountaccount(savedCode) REFERENCES `account` (code) ON UPDATE CASCADE ON DELETE CASCADE
+) DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `account_book`
+--
+INSERT INTO account_book (userID, savedCode, name)
+VALUES 	(1, 2, 'Niccolò_2'),
+		(2, 1, 'Paolo_1');
