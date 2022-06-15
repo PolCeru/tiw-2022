@@ -16,7 +16,7 @@
         <h1>Login</h1>
         <form action="login" method="POST">
             <label>Email:
-                <input type="text" name="email" th:value="${email}" required>
+                <input type="email" name="email" th:value="${email}" required>
             </label><br>
             <label>Password:
                 <input type="password" name="password" required>
@@ -32,7 +32,7 @@
         <h1>Sign Up</h1>
         <form action="signup" method="POST">
             <label>Email:
-                <input type="text" name="email" th:value="${emailSignup}" required>
+                <input type="email" name="email" th:value="${emailSignup}" required>
             </label><br>
             <label>Name:
                 <input type="text" name="name" th:value="${nameSignup}" required>
