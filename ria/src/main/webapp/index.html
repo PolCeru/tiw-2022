@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
+    <title>Login page</title>
+    <link rel="stylesheet" type="text/css" media="all" href="css/generic.css"/>
+    <link rel="stylesheet" type="text/css" media="all" href="css/index.css"/>
+    <script src="js/utils.js" defer></script>
+    <script src="js/login.js" defer></script>
+</head>
+<body>
+
+<div id="header">
+    <h1>Welcome to the Bank Application!</h1>
+</div>
+<div id="page">
+    <div class="form">
+        <h1>Login</h1>
+        <form>
+            <label>Email:
+                <input type="email" name="email" required>
+            </label><br>
+            <label>Password:
+                <input type="password" name="password" required>
+            </label><br>
+            <input id="login-button" class="sendButton" type="submit" value="Login">
+            <p id="login-msg" class="error"></p>
+        </form>
+    </div>
+
+    <div id="vl"></div>
+
+    <div class="form">
+        <h1>Sign Up</h1>
+        <form>
+            <label>Email:
+                <input type="email" name="email" required>
+            </label><br>
+            <label>Name:
+                <input type="text" name="name" required>
+            </label><br>
+            <label>Surname:
+                <input type="text" name="surname" required>
+            </label><br>
+            <label>Password:
+                <input type="password" name="password" required>
+            </label><br>
+            <label>Confirm Password:
+                <input type="password" name="confirmPassword" required>
+            </label><br>
+            <input id="signup-button" class="sendButton" type="submit" value="SignUp">
+            <p id="signup-msg" class="error"></p>
+        </form>
+    </div>
+</div>
+</body>
+</html>
