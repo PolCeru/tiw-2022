@@ -13,14 +13,14 @@
             <span id="backButton">&#11176;</span>
         </a>
     </div>
-    <h1 th:text="${'Account n. ' + senderAccountCode}">Account Page</h1>
+    <h1 th:text="${'Account n. ' + activeAccount}">Account Page</h1>
     <div id="logout">
         <a th:href="@{/logout}">Logout</a>
     </div>
 </div>
 <div id="transfer-error">
     <div class="content">
-        <h1>The requested transfer could not be performed:</h1>
+        <h1>The requested transfer could not be performed</h1>
         <p th:text="${errorMsg}"></p>
     </div>
 </div>
