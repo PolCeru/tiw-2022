@@ -17,9 +17,10 @@ public class ConnectionHandler {
             Class.forName(driver);
             connection = DriverManager.getConnection(url, user, password);
         } catch (ClassNotFoundException e) {
-            throw new UnavailableException("Couldn't load the database driver");
+            throw new UnavailableException("Couldn't find the the JDBC driver class: " + e.getMessage() +
+                    ", make sure the connector library is imported correctly");
         } catch (SQLException e) {
-            throw new UnavailableException("Couldn't open a connection to the DB");
+            throw new UnavailableException("Couldn't open a connection to the DB: " + e.getMessage());
         }
         return connection;
     }
