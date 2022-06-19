@@ -1,17 +1,18 @@
-function makeFormRequest(url, formElement, callback, reset = true) {
-    let request = new XMLHttpRequest()
-    request.onreadystatechange = function () {
-        callback(request)
-    }
+function makeFormRequest(url, formElement) {
+    return fetch(url, {
+        method: "POST",
+        body: new URLSearchParams(new FormData(formElement)),
+    })
+}
 
-    request.open("POST", url)
+function makeLogoutRequest() {
+    return fetch("logout", {
+        method: "GET",
+    })
+}
 
-    if (formElement == null) {
-        request.send()
-    } else {
-        request.send(new FormData(formElement))
-    }
-
-    if (formElement !== null && reset === true)
-        formElement.reset()
+function makeGetRequest(url) {
+    return fetch(url, {
+        method: "GET",
+    })
 }
