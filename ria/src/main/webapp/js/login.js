@@ -1,34 +1,44 @@
-document.getElementById("login-button").addEventListener("click", (event) => {
-    event.preventDefault();
-    let form = event.target.closest("form")
-    if (form.checkValidity()) {
-        makeFormRequest('login', form, function (request) {
-            if (request.readyState === XMLHttpRequest.DONE) {
-                const response = JSON.parse(request.responseText)
-                if (request.status === 200) {
-                    sessionStorage.setItem("sessionId", response.sessionId);
-                    window.location.navigate("home.html")
-                } else {
-                    document.getElementById("login-msg").textContent = response.message;
-                }
-            }
-        })
-    } else form.reportValidity()
-})
+(function () {
+    let loginForm = document.getElementById("login-form")
+    let loginMsg = document.getElementById("login-msg")
+    let signupForm = document.getElementById("signup-form")
+    let signupMsg = document.getElementById("signup-msg")
 
-document.getElementById("signup-button").addEventListener("click", (event) => {
-    event.preventDefault();
-    let form = event.target.closest("form")
-    if (form.checkValidity()) {
-        makeFormRequest('signup', form, function (request) {
-            if (request.readyState === XMLHttpRequest.DONE) {
-                const response = JSON.parse(request.responseText)
-                if (response !== undefined && response.message !== 'undefined' && response.message !== 'null')
-                    document.getElementById("signup-msg").textContent = response.message
-                else
-                    document.getElementById("signup-msg").textContent = "An unknown error occurred"
-            }
-        })
-    } else
-        form.reportValidity()
-})
+    loginForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        if (loginForm.checkValidity()) {
+            makeFormRequest("login", loginForm).then(response => {
+                if (response.ok) {
+                    response.json().then(json => {
+                        sessionStorage.setItem("name", json.name);
+                        sessionStorage.setItem("id", json.id);
+                        window.location.href = "home";
+                    })
+                } else {
+                    response.json().then(json => {
+                        loginMsg.textContent = json.error;
+                    })
+                }
+            })
+        } else {
+            loginForm.reportValidity()
+        }
+    })
+
+    signupForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        if (signupForm.checkValidity()) {
+            makeFormRequest("signup", signupForm).then(response => {
+                if (response.ok && response.status === 201) {
+                    signupMsg.textContent = "User account created successfully"
+                } else {
+                    response.json().then(json => {
+                        signupMsg.textContent = json.error;
+                    })
+                }
+            })
+        } else {
+            signupForm.reportValidity()
+        }
+    })
+})()
