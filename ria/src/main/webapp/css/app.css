@@ -1,0 +1,266 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+html {
+    background-color: #dfdfdf;
+    font-family: "Inter", sans-serif;
+    font-size: 15px;
+}
+
+body {
+    margin: 0;
+}
+
+.container {
+    display: flex;
+    margin-top: 1.6em;
+    flex-direction: row;
+}
+
+#header {
+    margin: auto;
+    display: flex;
+    background-color: #243b53;
+    text-align: center;
+    width: 75%;
+    border-bottom-left-radius: 100px;
+    border-bottom-right-radius: 100px;
+    justify-content: space-around;
+    align-items: center;
+}
+
+#header h1 {
+    padding: 1%;
+    color: #dfdfdf;
+    margin: 0;
+}
+
+.sendButton {
+    position: relative;
+    left: 50%;
+    transform: translate(-50%);
+    height: 50px;
+    width: 150px;
+    border-radius: 8px;
+    background-color: #243b53;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-bottom: 0;
+    margin-top: 20px;
+}
+
+.sendButton:hover {
+    background-color: #102a43;
+}
+
+.sendButton:active {
+    background-color: #334e68;
+}
+
+.content {
+    padding: 50px;
+    border-radius: 8px;
+    background-color: white;
+    box-shadow: 0 0 20px rgb(0 0 0 / 15%);
+}
+
+.error {
+    color: #FF3333;
+    margin-top: 20px;
+    font-weight: 700;
+    text-align: center;
+}
+
+input {
+    width: 100%;
+    height: 40px;
+    border-radius: 8px;
+    border: 0;
+    background-color: #d8d8d8;
+    padding-left: 10px;
+    margin-bottom: 10px;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.logout {
+    width: 100px;
+    font-size: 1.4em;
+    padding: 30px 0;
+}
+
+.back {
+    visibility: hidden;
+    width: 100px;
+    font-size: 3.5em;
+}
+
+.logout a, .logout a:link, .logout a:visited, .back a, .back a:link, .back a:visited {
+    color: #dfdfdf;
+    text-decoration: none;
+}
+
+.logout a:hover, .back a:hover {
+    color: #afafaf;
+}
+
+.logout a:active, .back a:active {
+    color: #ffffff;
+}
+
+#vl {
+    border: 1px solid #b8b8b8;
+    height: 800px;
+}
+
+#hl {
+    border: 1px solid #b8b8b8;
+    width: 1700px;
+}
+
+/*
+-------------------------------------------------------
+    Home page styles
+-------------------------------------------------------
+*/
+.container-home {
+    flex-direction: column;
+    gap: 2em;
+    margin-top: 2.3em;
+    align-items: center;
+}
+
+.content-home {
+    width: 350px;
+    height: 260px;
+    overflow: auto;
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: column;
+}
+
+.detailRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.button {
+    background-color: #243b53;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+/*
+-------------------------------------------------------
+    Account page styles
+-------------------------------------------------------
+*/
+.content-account {
+    width: 420px;
+}
+
+.container-account {
+    justify-content: center;
+    gap: 5em;
+}
+
+.leftWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.rightWrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.detailRow {
+    display: flex;
+    align-content: center;
+    justify-content: space-between;
+}
+
+#transfer-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.detailRow p {
+    font-weight: bolder;
+}
+
+.transferTable {
+    border-collapse: collapse;
+    min-width: 400px;
+}
+
+.transferTable thead tr {
+    background-color: #243b53;
+    color: #ffffff;
+    text-align: left;
+}
+
+.transferTable th, .transferTable td {
+    padding: 12px 14px;
+    text-align: center;
+}
+
+.transferTable tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+/*
+-------------------------------------------------------
+    Modal styles
+-------------------------------------------------------
+ */
+.modal {
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+/* center a div in the middle of the screen */
+.centered {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#transfer-error {
+    display: flex;
+    justify-content: center;
+    margin-top: 200px;
+}
+
+.content {
+    width: 600px;
+    display: flex;
+    flex-direction: column;
+}
+
+.lowerWrapper {
+    display: flex;
+    margin-top: 50px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#vl {
+    height: 200px;
+}
