@@ -35,7 +35,7 @@
         <h2>Open a new account</h2>
         <form action="account/open" method="POST">
             <label>Initial balance:
-                <input type="number" step="1" min="0" name="balance" th:value="${balance}" required>
+                <input type="number" step="0.01" min="0.01" name="balance" th:value="${balance}" required>
             </label><br>
             <input class="sendButton" type="submit" value="Open">
             <p th:text="${errorMsg}"></p>
