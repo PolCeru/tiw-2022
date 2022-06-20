@@ -3,15 +3,19 @@ package it.polimi.tiw.project4.utils;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 import it.polimi.tiw.project4.schemas.ErrorResponse;
+import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter;
 
 import java.io.IOException;
+import java.util.Date;
 
 public class JsonHelper {
     private static final Moshi moshi;
     private static final JsonAdapter<ErrorResponse> errorResponseAdapter;
 
     static {
-        moshi = new Moshi.Builder().build();
+        moshi = new Moshi.Builder()
+                .add(Date.class, new Rfc3339DateJsonAdapter().nullSafe())
+                .build();
         errorResponseAdapter = moshi.adapter(ErrorResponse.class);
     }
 

@@ -26,6 +26,12 @@
             <artifactId>moshi</artifactId>
             <version>1.13.0</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.squareup.moshi/moshi-adapters -->
+        <dependency>
+            <groupId>com.squareup.moshi</groupId>
+            <artifactId>moshi-adapters</artifactId>
+            <version>1.13.0</version>
+        </dependency>
     </dependencies>
 
     <build>
