@@ -14,12 +14,13 @@ public class Transfer {
     public Transfer() {
     }
 
-    public Transfer(int transferID, Date date, float amount, int sender, int recipient) {
+    public Transfer(int transferID, Date date, float amount, int sender, int recipient, String reason) {
         this.transferID = transferID;
         this.date = date;
         this.amount = amount;
         this.sender = sender;
         this.recipient = recipient;
+        this.reason = reason;
     }
 
     public int getTransferID() {
