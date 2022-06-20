@@ -2,10 +2,8 @@ package it.polimi.tiw.project4.controllers;
 
 import it.polimi.tiw.project4.beans.Account;
 import it.polimi.tiw.project4.beans.Transfer;
-import it.polimi.tiw.project4.beans.User;
 import it.polimi.tiw.project4.dao.AccountDAO;
 import it.polimi.tiw.project4.dao.TransferDAO;
-import it.polimi.tiw.project4.dao.UserDAO;
 import it.polimi.tiw.project4.utils.ConnectionHandler;
 import it.polimi.tiw.project4.utils.TemplateEngineHandler;
 import org.thymeleaf.TemplateEngine;
@@ -71,15 +69,11 @@ public class TransferResult extends HttpServlet {
                     return;
                 }
 
-                UserDAO userDao = new UserDAO(connection);
                 AccountDAO accountDao = new AccountDAO(connection);
-                User sender, recipient;
                 Account senderAccount, recipientAccount;
                 try {
                     senderAccount = accountDao.getAccount(transfer.getSender());
                     recipientAccount = accountDao.getAccount(transfer.getRecipient());
-                    sender = userDao.getUser(senderAccount.getUserID());
-                    recipient = userDao.getUser(recipientAccount.getUserID());
                 } catch (SQLException e) {
                     response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to retrieve the requested transfer details");
                     return;
@@ -92,13 +86,13 @@ public class TransferResult extends HttpServlet {
                 ctx.setVariable("date", transfer.getDate());
 
                 // Populate sender details
-                ctx.setVariable("senderUserCode", sender.getId());
+                ctx.setVariable("senderUserCode", senderAccount.getUserID());
                 ctx.setVariable("senderAccountCode", transfer.getSender());
                 ctx.setVariable("senderBalanceBefore", senderAccount.getBalance() + transfer.getAmount());
                 ctx.setVariable("senderBalanceAfter", senderAccount.getBalance());
 
                 // Populate recipient details
-                ctx.setVariable("recipientUserCode", recipient.getId());
+                ctx.setVariable("recipientUserCode", recipientAccount.getUserID());
                 ctx.setVariable("recipientAccountCode", transfer.getRecipient());
                 ctx.setVariable("recipientBalanceBefore", recipientAccount.getBalance() - transfer.getAmount());
                 ctx.setVariable("recipientBalanceAfter", recipientAccount.getBalance());
