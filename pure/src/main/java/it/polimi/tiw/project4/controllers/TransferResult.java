@@ -6,6 +6,7 @@ import it.polimi.tiw.project4.dao.AccountDAO;
 import it.polimi.tiw.project4.dao.TransferDAO;
 import it.polimi.tiw.project4.utils.ConnectionHandler;
 import it.polimi.tiw.project4.utils.TemplateEngineHandler;
+import org.apache.commons.text.StringEscapeUtils;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 
@@ -40,8 +41,8 @@ public class TransferResult extends HttpServlet {
         TransferStatus transferStatus;
         int resultCode;
         try {
-            transferStatus = TransferStatus.parseStatus(request.getParameter("result"));
-            resultCode = Integer.parseInt(request.getParameter("code"));
+            transferStatus = TransferStatus.parseStatus(StringEscapeUtils.escapeJava(request.getParameter("result")));
+            resultCode = Integer.parseInt(StringEscapeUtils.escapeJava(request.getParameter("code")));
         } catch (IllegalArgumentException e) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid transfer parameters");
             return;

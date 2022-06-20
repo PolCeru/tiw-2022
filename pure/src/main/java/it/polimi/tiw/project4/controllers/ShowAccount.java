@@ -6,6 +6,7 @@ import it.polimi.tiw.project4.dao.AccountDAO;
 import it.polimi.tiw.project4.dao.TransferDAO;
 import it.polimi.tiw.project4.utils.ConnectionHandler;
 import it.polimi.tiw.project4.utils.TemplateEngineHandler;
+import org.apache.commons.text.StringEscapeUtils;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 
@@ -41,7 +42,7 @@ public class ShowAccount extends HttpServlet {
         Account account = null;
         AccountDAO accountDao = new AccountDAO(connection);
         try {
-            accountCode = Integer.parseInt(request.getParameter("code"));
+            accountCode = Integer.parseInt(StringEscapeUtils.escapeJava(request.getParameter("code")));
             account = accountDao.getAccount(accountCode);
         } catch (NumberFormatException ignored) {
         } catch (SQLException e) {

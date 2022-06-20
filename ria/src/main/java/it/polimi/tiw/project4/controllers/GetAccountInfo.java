@@ -5,6 +5,7 @@ import it.polimi.tiw.project4.beans.Account;
 import it.polimi.tiw.project4.dao.AccountDAO;
 import it.polimi.tiw.project4.utils.ConnectionHandler;
 import it.polimi.tiw.project4.utils.JsonHelper;
+import org.apache.commons.text.StringEscapeUtils;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -37,7 +38,7 @@ public class GetAccountInfo extends HttpServlet implements JsonServlet {
         int currentUser = (int) request.getSession().getAttribute("currentUser");
         int accountId;
         try {
-            accountId = Integer.parseInt(request.getParameter("id"));
+            accountId = Integer.parseInt(StringEscapeUtils.escapeJava(request.getParameter("id")));
         } catch (NumberFormatException e) {
             sendJsonError(response, HttpServletResponse.SC_BAD_REQUEST, "Invalid account ID");
             return;

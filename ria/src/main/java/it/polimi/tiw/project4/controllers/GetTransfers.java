@@ -7,6 +7,7 @@ import it.polimi.tiw.project4.dao.TransferDAO;
 import it.polimi.tiw.project4.schemas.TransfersResponse;
 import it.polimi.tiw.project4.utils.ConnectionHandler;
 import it.polimi.tiw.project4.utils.JsonHelper;
+import org.apache.commons.text.StringEscapeUtils;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -40,7 +41,7 @@ public class GetTransfers extends HttpServlet implements JsonServlet {
         int currentUser = (int) request.getSession().getAttribute("currentUser");
         int account;
         try {
-            account = Integer.parseInt(request.getParameter("account"));
+            account = Integer.parseInt(StringEscapeUtils.escapeJava(request.getParameter("account")));
         } catch (NumberFormatException e) {
             sendJsonError(response, HttpServletResponse.SC_BAD_REQUEST, "Failed to retrieve transfers: invalid account code");
             return;
