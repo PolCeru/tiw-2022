@@ -13,44 +13,46 @@
 <div id="header">
     <h1>Welcome to the Bank Application!</h1>
 </div>
-<div id="page" class="container">
-    <div class="form">
-        <h1>Login</h1>
-        <form id="login-form">
-            <label>Email:
-                <input type="email" name="email" required>
-            </label><br>
-            <label>Password:
-                <input type="password" name="password" required>
-            </label><br>
-            <input class="sendButton" type="submit" value="Login">
-            <p id="login-msg" class="error"></p>
-        </form>
-    </div>
+<div id="page">
+    <div class="container container-login">
+        <div class="form">
+            <h1>Login</h1>
+            <form id="login-form">
+                <label>Email:
+                    <input type="email" name="email" required>
+                </label><br>
+                <label>Password:
+                    <input type="password" name="password" required>
+                </label><br>
+                <input class="sendButton" type="submit" value="Login">
+                <p id="login-msg" class="error"></p>
+            </form>
+        </div>
 
-    <div id="vl"></div>
+        <div id="vl"></div>
 
-    <div class="form">
-        <h1>Sign Up</h1>
-        <form id="signup-form">
-            <label>Email:
-                <input type="email" name="email" required>
-            </label><br>
-            <label>Name:
-                <input type="text" name="name" required>
-            </label><br>
-            <label>Surname:
-                <input type="text" name="surname" required>
-            </label><br>
-            <label>Password:
-                <input type="password" name="password" required>
-            </label><br>
-            <label>Confirm Password:
-                <input type="password" name="confirmPassword" required>
-            </label><br>
-            <input id="signup-button" class="sendButton" type="submit" value="SignUp">
-            <p id="signup-msg" class="error"></p>
-        </form>
+        <div class="form">
+            <h1>Sign Up</h1>
+            <form id="signup-form">
+                <label>Email:
+                    <input type="email" name="email" required>
+                </label><br>
+                <label>Name:
+                    <input type="text" name="name" required>
+                </label><br>
+                <label>Surname:
+                    <input type="text" name="surname" required>
+                </label><br>
+                <label>Password:
+                    <input type="password" name="password" required>
+                </label><br>
+                <label>Confirm Password:
+                    <input type="password" name="confirmPassword" required>
+                </label><br>
+                <input id="signup-button" class="sendButton" type="submit" value="SignUp">
+                <p id="signup-msg" class="error"></p>
+            </form>
+        </div>
     </div>
 </div>
 </body>

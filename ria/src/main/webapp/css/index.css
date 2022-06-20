@@ -5,7 +5,8 @@
     box-shadow: 0 0 20px rgb(0 0 0 / 15%);
 }
 
-#page {
-    justify-content: space-evenly;
+.container-login {
+    justify-content: center;
     align-items: center;
+    gap: 6em;
 }

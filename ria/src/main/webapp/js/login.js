@@ -7,19 +7,20 @@
     loginForm.addEventListener("submit", (event) => {
         event.preventDefault();
         if (loginForm.checkValidity()) {
-            makeFormRequest("login", loginForm).then(response => {
-                if (response.ok) {
-                    response.json().then(json => {
-                        sessionStorage.setItem("name", json.name);
-                        sessionStorage.setItem("id", json.id);
-                        window.location.href = "home";
-                    })
-                } else {
-                    response.json().then(json => {
-                        loginMsg.textContent = json.error;
-                    })
-                }
-            })
+            makeFormRequest("login", loginForm)
+                .then(async response => {
+                    if (!response.ok)
+                        throw response
+                    return response.json()
+                })
+                .then(json => {
+                    sessionStorage.setItem("name", json.name)
+                    sessionStorage.setItem("id", json.id)
+                    window.location.href = "home"
+                })
+                .catch(async response => {
+                    loginMsg.textContent = (await response.json()).error;
+                })
         } else {
             loginForm.reportValidity()
         }
@@ -28,15 +29,15 @@
     signupForm.addEventListener("submit", (event) => {
         event.preventDefault();
         if (signupForm.checkValidity()) {
-            makeFormRequest("signup", signupForm).then(response => {
-                if (response.ok && response.status === 201) {
+            makeFormRequest("signup", signupForm)
+                .then(async response => {
+                    if (response.status !== 201)
+                        throw response
                     signupMsg.textContent = "User account created successfully"
-                } else {
-                    response.json().then(json => {
-                        signupMsg.textContent = json.error;
-                    })
-                }
-            })
+                })
+                .catch(async response => {
+                    signupMsg.textContent = (await response.json()).error
+                })
         } else {
             signupForm.reportValidity()
         }
