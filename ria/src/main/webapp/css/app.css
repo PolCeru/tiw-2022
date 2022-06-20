@@ -12,7 +12,7 @@ body {
 
 .container {
     display: flex;
-    margin-top: 1.6em;
+    margin: 3em 0;
     flex-direction: row;
 }
 
@@ -26,6 +26,7 @@ body {
     border-bottom-right-radius: 100px;
     justify-content: space-around;
     align-items: center;
+    height: 85px;
 }
 
 #header h1 {
@@ -40,7 +41,7 @@ body {
     transform: translate(-50%);
     height: 50px;
     width: 150px;
-    border-radius: 8px;
+    border-radius: 12px;
     background-color: #243b53;
     color: white;
     font-size: 16px;
@@ -111,12 +112,12 @@ input {
 
 #vl {
     border: 1px solid #b8b8b8;
-    height: 800px;
+    align-self: stretch;
 }
 
 #hl {
     border: 1px solid #b8b8b8;
-    width: 1700px;
+    align-self: stretch;
 }
 
 /*
@@ -126,18 +127,10 @@ input {
 */
 .container-home {
     flex-direction: column;
-    gap: 2em;
-    margin-top: 2.3em;
+    gap: 3em;
     align-items: center;
-}
-
-.content-home {
-    width: 350px;
-    height: 260px;
-    overflow: auto;
-    display: flex;
-    justify-content: space-evenly;
-    flex-direction: column;
+    max-width: 600px;
+    margin: 3em auto 0;
 }
 
 .detailRow {
@@ -153,7 +146,15 @@ input {
     padding: 10px 20px;
     text-decoration: none;
     cursor: pointer;
-    border-radius: 8px;
+    border-radius: 12px;
+}
+
+.button:hover {
+    background-color: #102a43;
+}
+
+.button:active {
+    background-color: #334e68;
 }
 
 /*
@@ -167,7 +168,8 @@ input {
 
 .container-account {
     justify-content: center;
-    gap: 5em;
+    align-items: center;
+    gap: 6em;
 }
 
 .leftWrapper {
@@ -175,6 +177,7 @@ input {
     flex-direction: column;
     align-items: center;
     justify-content: space-evenly;
+    gap: 3em;
 }
 
 .rightWrapper {
@@ -189,7 +192,7 @@ input {
     justify-content: space-between;
 }
 
-#transfer-list {
+.transfer-list {
     display: flex;
     flex-direction: column;
 }
@@ -234,7 +237,6 @@ input {
     background-color: rgba(0, 0, 0, 0.4);
 }
 
-/* center a div in the middle of the screen */
 .centered {
     position: fixed;
     top: 50%;
@@ -249,7 +251,7 @@ input {
 }
 
 .content {
-    width: 600px;
+    align-self: stretch;
     display: flex;
     flex-direction: column;
 }
@@ -259,8 +261,47 @@ input {
     margin-top: 50px;
     align-items: center;
     justify-content: space-between;
+    gap: 3em;
 }
 
-#vl {
-    height: 200px;
+.modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1.2em;
+    margin: 2em 0 0 0;
+}
+
+/*
+-------------------------------------------------------
+    Autocomplete styles
+-------------------------------------------------------
+ */
+.autocomplete-list {
+    display: flex;
+    position: absolute;
+    background: #ffffff;
+    z-index: 1;
+    border-radius: 8px;
+    flex-direction: column;
+    left: 0;
+    right: 0;
+    margin-top: -9px;
+    box-shadow: 0 5px 20px rgb(0 0 0 / 30%);
+    overflow: clip;
+}
+
+.autocomplete-item {
+    padding: 10px 10px;
+    background: #ffffff;
+}
+
+.autocomplete-item:hover {
+    background: #e8e8e8;
+ }
+
+.autocomplete-item div {
+    padding: 10px;
+    cursor: pointer;
+    background-color: white;
+    border: 1px solid #b8b8b8;
 }

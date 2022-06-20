@@ -16,3 +16,10 @@ function makeGetRequest(url) {
         method: "GET",
     })
 }
+
+function makeGetRequestParams(url, params) {
+    let urlParams = new URLSearchParams(params)
+    return fetch(url + '?' + urlParams, {
+        method: "GET",
+    })
+}

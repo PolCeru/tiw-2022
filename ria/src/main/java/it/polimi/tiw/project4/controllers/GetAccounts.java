@@ -18,7 +18,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
-@WebServlet("/accounts")
+@WebServlet("/account")
 public class GetAccounts extends HttpServlet implements JsonServlet {
     private Connection connection = null;
     private JsonAdapter<AccountsResponse> responseAdapter;
@@ -36,9 +36,9 @@ public class GetAccounts extends HttpServlet implements JsonServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        // Query DB to get the user accounts
         int currentUser = (int) request.getSession().getAttribute("currentUser");
 
+        // Query DB to get the user accounts
         AccountDAO accountDao = new AccountDAO(connection);
         List<Account> userAccounts;
         try {
