@@ -210,17 +210,6 @@
      * @constructor
      */
     function AccountDetailsPage() {
-        this.accountBook = new AccountBook().entries
-
-        let savedRecipientUserIDs = []
-        let savedRecipientAccountIDs = []
-        this.accountBook.then(entries => {
-            entries.forEach(entry => {
-                savedRecipientUserIDs.push(entry.savedUser)
-                savedRecipientAccountIDs.push(entry.savedCode)
-            })
-        })
-
         /**
          * Loads the current account info from the server and displays it.
          */
@@ -260,40 +249,48 @@
          */
         this.registerTransferForm = () => {
             document.getElementById("senderAccountCode").value = sessionStorage.getItem("currentAccount")
-            let recipientID_inputField = document.getElementsByName("recipientID")[0]
-            let recipient_Autocomplete = new Autocomplete(recipientID_inputField, savedRecipientAccountIDs)
+
             let transferForm = document.getElementById("transfer-form")
-            transferForm.addEventListener("submit", (event) => {
-                event.preventDefault()
-                if (transferForm.checkValidity()) {
-                    makeFormRequest("do_transfer", transferForm)
-                        .then(response => {
-                            if (!response.ok)
-                                throw response
-                            return response.json()
-                        })
-                        .then(json => {
-                            const buttons = [
-                                {
-                                    text: "Add to account book",
-                                    onClick: (button) => {
-                                        this.showAddToBookModal(button, transferForm.recipientAccountCode.value)
-                                    }
+            // Load the account book, then register the autocomplete watcher once the account book has loaded
+            AccountBook.load().then(accountBook => {
+                new AutocompleteWatcher(transferForm, accountBook)
+
+                transferForm.addEventListener("submit", (event) => {
+                    event.preventDefault()
+                    if (transferForm.checkValidity()) {
+                        makeFormRequest("do_transfer", transferForm)
+                            .then(response => {
+                                if (!response.ok)
+                                    throw response
+                                return response.json()
+                            })
+                            .then(json => {
+                                // Only add the 'Add to account book' button if the recipient is not in the book already
+                                let buttons
+                                if (!accountBook.find(entry => entry.savedCode === json.recipientAccountCode.toString())) {
+                                    buttons = [
+                                        {
+                                            text: "Add to account book",
+                                            onClick: (button) => {
+                                                this.showAddToBookModal(button, transferForm.recipientAccountCode.value)
+                                            }
+                                        }
+                                    ]
                                 }
-                            ]
-                            let transferModal = new Modal(TransferModal(json), buttons, undefined, this.loadTransferList)
-                            transferModal.show()
-                        })
-                        .catch(async response => {
-                            let errorModal = new Modal(ErrorModal((await response.json()).error()))
-                            errorModal.show()
-                        })
-                } else {
-                    transferForm.reportValidity()
-                }
+
+                                let transferModal = new Modal(TransferModal(json), buttons, undefined, this.loadTransferList)
+                                transferModal.show()
+                            })
+                            .catch(async response => {
+                                let errorModal = new Modal(ErrorModal((await response.json()).error()))
+                                errorModal.show()
+                            })
+                    } else {
+                        transferForm.reportValidity()
+                    }
+                })
             })
 
-            //TODO: Check client side account book and in case disable the button
             /**
              * Shows the AddToBook modal when the user clicks the add to book button.
              * @param {HTMLElement} button - the button that was clicked
@@ -324,6 +321,9 @@
                             } else
                                 nameForm.reportValidity()
                         })
+                    },
+                    () => {
+                        AccountBook.reload()
                     })
                     .show()
             }
@@ -358,6 +358,11 @@
          * @param {Transfer[]} transfers
          */
         this.renderTransferList = (transfers) => {
+            if (transfers.length === 0) {
+                document.getElementById("transfer-container").innerHTML = `<p>No transfers for this account</p>`
+                return
+            }
+
             let table = document.createElement("table")
             table.id = "transfer-list"
             table.classList.add("transferTable")
@@ -413,16 +418,16 @@
                             <form id="transfer-form" autocomplete="off">
                                 <input id="senderAccountCode" name="senderAccountCode" type="hidden">
                                 <label style="position: relative">Recipient user code:
-                                    <input type="text" name="recipientID" value="1" required>
+                                    <input type="text" name="recipientCode" required>
                                 </label><br>
                                 <label>Recipient account code:
-                                    <input type="text" name="recipientAccountCode" value="1" required>
+                                    <input type="text" name="recipientAccountCode" required>
                                 </label><br>
                                 <label>Reason:
-                                    <input type="text" name="reason" value="test" required>
+                                    <input type="text" name="reason" required>
                                 </label><br>
                                 <label>Transfer amount:
-                                    <input type="number" step="0.01" min="0.01" name="amount" value="1" required>
+                                    <input type="number" step="0.01" min="0.01" name="amount" required>
                                 </label><br>
                                 <input class="sendButton" type="submit" value="Transfer">
                             </form>
@@ -445,68 +450,92 @@
 
     /**
      * An account book entry.
-     * @typedef {{savedUser: number, savedCode: number, name: string}} AccountBookEntry
+     * @typedef {{savedUser: string, savedCode: string, name: string}} AccountBookEntry
      */
     /**
      * Handles the retrieval of the account book.
-     * @constructor
+     * @class
+     * @singleton
      */
-    function AccountBook() {
+    class AccountBook {
         /**
          * @type {Promise<AccountBookEntry[]>}
          */
-        this.entries = new Promise(async resolve => {
-            await makeGetRequest("account_book")
-                .then(response => {
-                    if (!response.ok)
-                        throw response
-                    return response.json()
-                })
-                .then(json => {
-                    resolve(json.bookEntries)
-                })
-                .catch(async response => {
-                    new Modal(ErrorModal((await response.json()).error())).show()
-                })
-        })
+        static #entries
+
+        static load() {
+            AccountBook.reload()
+            return AccountBook.#entries
+        }
+
+        /**
+         * Reloads the account book.
+         */
+        static reload() {
+            AccountBook.#entries = new Promise(async resolve => {
+                await makeGetRequest("account_book")
+                    .then(response => {
+                        if (!response.ok)
+                            throw response
+                        return response.json()
+                    })
+                    .then(json => {
+                        resolve(json.bookEntries ? json.bookEntries : [])
+                    })
+                    .catch(async response => {
+                        new Modal(ErrorModal((await response.json()).error())).show()
+                    })
+            })
+            console.log(AccountBook.#entries)
+        }
     }
 
     /**
-     * Handles the autocomplete feature on the given input field.
-     * @param {HTMLInputElement} textField - the text field to watch
-     * @param {String[]} entries - the entries where the autocomplete will search for suggestions
+     * Handles the account book autocomplete feature on the given input field.
+     * @param {HTMLFormElement} transferForm - the text field to watch
+     * @param {AccountBookEntry[]} entries - the entries where the autocomplete will search for suggestions
      * @constructor
      */
-    function Autocomplete(textField, entries) {
+    function AutocompleteWatcher(transferForm, entries) {
+        // Close the autocomplete panel when the user clicks outside
         document.body.addEventListener("click", () => {
             this.close()
         })
-        textField.addEventListener("input", () => {
+        let recipientCodeTextField = transferForm.querySelector("input[name=recipientCode]")
+        let recipientAccountCodeTextField = transferForm.querySelector("input[name=recipientAccountCode]")
+
+        recipientCodeTextField.addEventListener("input", () => {
             this.close()
-            let fieldValue = textField.value
-            if (!fieldValue) return false
+            let fieldValue = recipientCodeTextField.value
+            if (!fieldValue)
+                return false
             this.listDiv = document.createElement("div")
             this.listDiv.setAttribute("class", "autocomplete-list")
 
-            entries.forEach(pEntry => {
-                let entry = pEntry.toString()
-                if (entry.substring(0, fieldValue.length).toLowerCase() === fieldValue.toLowerCase()) {
+            // Find all entries that match the given value and add them to the suggestion list
+            entries.forEach(entry => {
+                let savedUser = entry.savedUser
+                if (savedUser.substring(0, fieldValue.length).toLowerCase() === fieldValue.toLowerCase()) {
                     let entryDiv = document.createElement("div")
                     entryDiv.classList.add("autocomplete-item")
-                    entryDiv.innerHTML = `<span>${entry.substring(0, fieldValue.length)}</span>`
-                    entryDiv.innerHTML += `<span style="color: #a1a1a1">${entry.substring(fieldValue.length) + "ciao"}</span>`
-                    entryDiv.innerHTML += `<input type='hidden' value="${entry}">`
+                    entryDiv.innerHTML =
+                        `<p class="autocomplete-name">${entry.name}</p>
+                        <span class="autocomplete-usertext">User: ${savedUser.substring(0, fieldValue.length)}</span>
+                        <span class="autocomplete-suggestion">${savedUser.substring(fieldValue.length)}</span>
+                        <span class="autocomplete-field">Account: ${entry.savedCode}</span>`
 
                     entryDiv.addEventListener("click", () => {
-                        textField.value = entryDiv.getElementsByTagName("input")[0].value
+                        recipientCodeTextField.value = entry.savedUser
+                        recipientAccountCodeTextField.value = entry.savedCode
                         this.close()
                     })
                     this.listDiv.append(entryDiv)
                 }
             })
 
+            // Only show the list if there are suggestions
             if (this.listDiv.children.length > 0)
-                textField.parentNode.append(this.listDiv)
+                recipientCodeTextField.parentNode.append(this.listDiv)
         })
 
         /**
@@ -527,8 +556,8 @@
      * A modal that is drawn on top of other elements on the page.
      * @param {string} child - the modal content as html string
      * @param {{text: string, onClick: onClick}[]} [buttons] - the buttons to be displayed
-     * @param {*} [onShow] - callback function called after the modal is shown
-     * @param {*} [onClose] - callback function called after the modal is closed
+     * @param {function} [onShow] - callback function called after the modal is shown
+     * @param {function} [onClose] - callback function called after the modal is closed
      * @constructor
      */
     function Modal(child, buttons, onShow, onClose) {
@@ -610,27 +639,27 @@
             `<div class="upperWrapper">
                 <h1>Transfer n. ${details.transferCode}</h1>
                     <div class="transfer-details">
-                        <p>${details.transferCode}</p>
-                        <p>$ ${details.amount}</p>
-                        <p>${details.reason}</p>
-                        <p>${details.date}</p>
+                        <p><span>Transfer code:</span> ${details.transferCode}</p>
+                        <p><span>Amount:</span> $${details.amount.toLocaleString(undefined, {minimumFractionDigits: 2})}</p>
+                        <p><span>Reason:</span> ${details.reason}</p>
+                        <p><span>Date:</span> ${new Date(details.date).toLocaleDateString()}</p>
                     </div>
             </div>
             <div class="lowerWrapper">
                 <div class="sender-details">
                     <h2>Sender</h2>
-                    <p>User code ${details.senderUserCode}</p>
-                    <p>Account Code ${details.senderAccountCode}</p>
-                    <p>Balance before transfer ${details.senderBalanceBefore}</p>
-                    <p>Balance after transfer ${details.senderBalanceAfter}</p>
+                    <p><span>User code:</span> ${details.senderUserCode}</p>
+                    <p><span>Account code:</span> ${details.senderAccountCode}</p>
+                    <p><span>Balance before transfer:</span> $${details.senderBalanceBefore.toLocaleString(undefined, {minimumFractionDigits: 2})}</p>
+                    <p><span>Balance after transfer:</span> $${details.senderBalanceAfter.toLocaleString(undefined, {minimumFractionDigits: 2})}</p>
                 </div>
                 <div id="vl"></div>
                 <div class="recipient-details">
-                    <h2>Recipient</h2>
-                    <p>User code ${details.recipientUserCode}</p>
-                    <p>Account code ${details.recipientAccountCode}</p>
-                    <p>Balance before transfer ${details.recipientBalanceBefore}</p>
-                    <p>Balance after transfer ${details.recipientBalanceAfter}</p>
+                    <h2><span>Recipient</h2>
+                    <p><span>User code:</span> ${details.recipientUserCode}</p>
+                    <p><span>Account code:</span> ${details.recipientAccountCode}</p>
+                    <p><span>Balance before transfer:</span> $${details.recipientBalanceBefore.toLocaleString(undefined, {minimumFractionDigits: 2})}</p>
+                    <p><span>Balance after transfer:</span> $${details.recipientBalanceAfter.toLocaleString(undefined, {minimumFractionDigits: 2})}</p>
                 </div>
             </div>`
         )

@@ -221,6 +221,9 @@ input {
     background-color: #f3f3f3;
 }
 
+.transfer-details span, .sender-details span, .recipient-details span{
+    font-weight: bold;
+}
 /*
 -------------------------------------------------------
     Modal styles
@@ -254,6 +257,10 @@ input {
     align-self: stretch;
     display: flex;
     flex-direction: column;
+}
+
+.modal .content {
+    width: fit-content;
 }
 
 .lowerWrapper {
@@ -297,11 +304,33 @@ input {
 
 .autocomplete-item:hover {
     background: #e8e8e8;
- }
+    cursor: pointer;
+}
 
 .autocomplete-item div {
     padding: 10px;
     cursor: pointer;
     background-color: white;
     border: 1px solid #b8b8b8;
+}
+
+.autocomplete-item p {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.autocomplete-item span {
+    font-size: 12px;
+}
+
+.autocomplete-name {
+    margin: 0 0 4px 0;
+}
+
+.autocomplete-suggestion {
+    color: #a1a1a1;
+}
+
+.autocomplete-field {
+    margin-left:10px
 }
