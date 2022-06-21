@@ -19,7 +19,7 @@ public class TransferDAO {
                 "FROM transfer t JOIN account s on sender = s.code " +
                 "JOIN account r on recipient = r.code " +
                 "WHERE sender = ? OR recipient = ? " +
-                "ORDER BY date, t.ID DESC";
+                "ORDER BY date DESC, t.ID DESC";
         try (PreparedStatement pstatement = con.prepareStatement(query)) {
             pstatement.setInt(1, accountcode);
             pstatement.setInt(2, accountcode);
