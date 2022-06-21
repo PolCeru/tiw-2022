@@ -29,8 +29,8 @@ public class AccountBookDAO {
                     ArrayList<AccountBookEntry> accountBookEntries = new ArrayList<>();
                     while (result.next()) {
                         AccountBookEntry entry = new AccountBookEntry();
-                        entry.setSavedUser(result.getInt("savedUser"));
-                        entry.setSavedCode(result.getInt("savedCode"));
+                        entry.setSavedUser(Integer.toString(result.getInt("savedUser")));
+                        entry.setSavedCode(Integer.toString(result.getInt("savedCode")));
                         entry.setName(result.getString("name"));
                         accountBookEntries.add(entry);
                     }
@@ -53,8 +53,8 @@ public class AccountBookDAO {
                 } else {
                     result.next();
                     AccountBookEntry entry = new AccountBookEntry();
-                    entry.setSavedUser(result.getInt("userID"));
-                    entry.setSavedCode(result.getInt("savedCode"));
+                    entry.setSavedUser(Integer.toString(result.getInt("userID")));
+                    entry.setSavedCode(Integer.toString(result.getInt("savedCode")));
                     entry.setName(result.getString("name"));
                     return entry;
                 }
