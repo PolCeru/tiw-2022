@@ -58,7 +58,7 @@ public class Login extends HttpServlet implements JsonServlet {
         // If the user exists, add info to the session and send back the user info,
         // otherwise send back an error message
         if (user == null) {
-            sendJsonError(response, HttpServletResponse.SC_NOT_FOUND, "Couldn't find your user account");
+            sendJsonError(response, HttpServletResponse.SC_NOT_FOUND, "Invalid username or password");
         } else {
             request.getSession().setAttribute("currentUser", user.getId());
             String jsonResponse = responseAdapter.toJson(new LoginResponse(user));
