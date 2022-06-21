@@ -545,10 +545,10 @@
                     let entryDiv = document.createElement("div")
                     entryDiv.classList.add("autocomplete-item")
                     entryDiv.innerHTML =
-                        `<p class="autocomplete-name">${entry.name}</p>
-                        <span class="autocomplete-usertext">User: ${savedUser.substring(0, fieldValue.length)}</span>
-                        <span class="autocomplete-suggestion">${savedUser.substring(fieldValue.length)}</span>
-                        <span class="autocomplete-field">Account: ${entry.savedCode}</span>`
+                        `<p class="autocomplete-name">${entry.name}</p>` +
+                        `<span class="autocomplete-usertext">User: ${savedUser.substring(0, fieldValue.length)}</span>` +
+                        `<span class="autocomplete-suggestion">${savedUser.substring(fieldValue.length)}</span>` +
+                        `<span class="autocomplete-field">Account: ${entry.savedCode}</span>`
 
                     entryDiv.addEventListener("click", () => {
                         recipientCodeTextField.value = entry.savedUser
