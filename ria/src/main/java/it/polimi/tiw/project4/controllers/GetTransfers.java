@@ -52,7 +52,7 @@ public class GetTransfers extends HttpServlet implements JsonServlet {
         List<Transfer> transferList;
         try {
             // Check if the user is the owner of the requested account
-            if (accountDao.getAccountFromUserID(currentUser, account) == null) {
+            if (accountDao.getAccountFromUserID(account, currentUser) == null) {
                 sendJsonError(response, HttpServletResponse.SC_FORBIDDEN,
                         "Failed to retrieve transfers of an account that doesn't exist for the current user");
                 return;
