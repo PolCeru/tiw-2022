@@ -62,11 +62,13 @@
      */
     function Header() {
         let back = document.getElementById("back")
-        back.addEventListener("click", () => {
+        back.addEventListener("click", (event) => {
+            event.preventDefault()
             pageRouter.goBack()
         })
 
-        document.getElementById("logout").addEventListener("click", () => {
+        document.getElementById("logout").addEventListener("click", (event) => {
+            event.preventDefault()
             makeLogoutRequest()
                 .then(response => {
                     if (response.ok && response.redirected) {

@@ -14,7 +14,7 @@ import java.io.IOException;
         "/home",
         "/account",
         "/do_transfer",
-        "/transfers",
+        "/transfer",
         "/get_account",
         "/add_to_book",
         "/account_book"
