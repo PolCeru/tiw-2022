@@ -17,9 +17,9 @@ public class AccountBookDAO {
     }
 
     public List<AccountBookEntry> getAccountBook(int userid) throws SQLException {
-        String query = "SELECT userID, savedCode, name " +
-                "FROM account_book " +
-                "WHERE userID = ?";
+        String query = "SELECT account.userID as savedUser, savedCode, name " +
+                "FROM account_book book JOIN account ON book.savedCode = account.code " +
+                "WHERE book.userID = ?";
         try (PreparedStatement pstatement = con.prepareStatement(query)) {
             pstatement.setInt(1, userid);
             try (ResultSet result = pstatement.executeQuery()) {
@@ -29,7 +29,7 @@ public class AccountBookDAO {
                     ArrayList<AccountBookEntry> accountBookEntries = new ArrayList<>();
                     while (result.next()) {
                         AccountBookEntry entry = new AccountBookEntry();
-                        entry.setUserID(result.getInt("userID"));
+                        entry.setSavedUser(result.getInt("savedUser"));
                         entry.setSavedCode(result.getInt("savedCode"));
                         entry.setName(result.getString("name"));
                         accountBookEntries.add(entry);
@@ -53,7 +53,7 @@ public class AccountBookDAO {
                 } else {
                     result.next();
                     AccountBookEntry entry = new AccountBookEntry();
-                    entry.setUserID(result.getInt("userID"));
+                    entry.setSavedUser(result.getInt("userID"));
                     entry.setSavedCode(result.getInt("savedCode"));
                     entry.setName(result.getString("name"));
                     return entry;

@@ -212,11 +212,11 @@
     function AccountDetailsPage() {
         this.accountBook = new AccountBook().entries
 
-        let userIDs = []
+        let savedRecipientUserIDs = []
         let savedRecipientAccountIDs = []
         this.accountBook.then(entries => {
             entries.forEach(entry => {
-                userIDs.push(entry.userID)
+                savedRecipientUserIDs.push(entry.savedUser)
                 savedRecipientAccountIDs.push(entry.savedCode)
             })
         })
@@ -445,7 +445,7 @@
 
     /**
      * An account book entry.
-     * @typedef {{userID: number, savedCode: number, name: string}} AccountBookEntry
+     * @typedef {{savedUser: number, savedCode: number, name: string}} AccountBookEntry
      */
     /**
      * Handles the retrieval of the account book.

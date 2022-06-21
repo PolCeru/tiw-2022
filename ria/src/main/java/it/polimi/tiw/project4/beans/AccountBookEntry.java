@@ -1,25 +1,25 @@
 package it.polimi.tiw.project4.beans;
 
 public class AccountBookEntry {
-    private int userID;
+    private int savedUser;
     private int savedCode;
     private String name;
 
     public AccountBookEntry() {
     }
 
-    public AccountBookEntry(int userID, int savedCode, String name) {
-        this.userID = userID;
+    public AccountBookEntry(int savedUser, int savedCode, String name) {
+        this.savedUser = savedUser;
         this.savedCode = savedCode;
         this.name = name;
     }
 
-    public int getUserID() {
-        return userID;
+    public int getSavedUser() {
+        return savedUser;
     }
 
-    public void setUserID(int userID) {
-        this.userID = userID;
+    public void setSavedUser(int savedUser) {
+        this.savedUser = savedUser;
     }
 
     public int getSavedCode() {
