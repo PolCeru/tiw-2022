@@ -251,82 +251,104 @@
             document.getElementById("senderAccountCode").value = sessionStorage.getItem("currentAccount")
 
             let transferForm = document.getElementById("transfer-form")
+            // Register the autocomplete watcher on this form
+            this.registerAutocomplete(transferForm)
+
+            transferForm.addEventListener("submit", (event) => {
+                event.preventDefault()
+                if (transferForm.checkValidity()) {
+                    makeFormRequest("do_transfer", transferForm)
+                        .then(response => {
+                            if (!response.ok)
+                                throw response
+                            return response.json()
+                        })
+                        .then(async json => {
+                            // Only add the 'Add to account book' button if the recipient is not in the book already
+                            let buttons
+                            let accountBook = await AccountBook.load()
+                            if (!accountBook.find(entry => entry.savedCode === json.recipientAccountCode.toString())) {
+                                buttons = [
+                                    {
+                                        text: "Add to account book",
+                                        onClick: (button) => {
+                                            this.showAddToBookModal(button, transferForm.recipientAccountCode.value)
+                                        }
+                                    }
+                                ]
+                            }
+
+                            // Show the modal with the transfer results
+                            new Modal(TransferModal(json), buttons, undefined, () => {
+                                // Reload the account info and the transfer list
+                                this.loadAccountInfo()
+                                this.loadTransferList()
+                                // Re-register the autocomplete watcher to pick up the new account book in case it has changed
+                                this.registerAutocomplete(transferForm)
+                                // Clear the form
+                                transferForm.reset()
+                            }).show()
+                        })
+                        .catch(async response => {
+                            new Modal(ErrorModal((await response.json()).error)).show()
+                        })
+                } else {
+                    transferForm.reportValidity()
+                }
+                return false
+            })
+        }
+
+        /**
+         * Attaches the account book autocomplete watcher to the given form.
+         * @param {HTMLFormElement} transferForm - the form to attach the watcher to
+         */
+        this.registerAutocomplete = (transferForm) => {
             // Load the account book, then register the autocomplete watcher once the account book has loaded
             AccountBook.load().then(accountBook => {
                 new AutocompleteWatcher(transferForm, accountBook)
-
-                transferForm.addEventListener("submit", (event) => {
-                    event.preventDefault()
-                    if (transferForm.checkValidity()) {
-                        makeFormRequest("do_transfer", transferForm)
-                            .then(response => {
-                                if (!response.ok)
-                                    throw response
-                                return response.json()
-                            })
-                            .then(json => {
-                                // Only add the 'Add to account book' button if the recipient is not in the book already
-                                let buttons
-                                if (!accountBook.find(entry => entry.savedCode === json.recipientAccountCode.toString())) {
-                                    buttons = [
-                                        {
-                                            text: "Add to account book",
-                                            onClick: (button) => {
-                                                this.showAddToBookModal(button, transferForm.recipientAccountCode.value)
-                                            }
-                                        }
-                                    ]
-                                }
-
-                                let transferModal = new Modal(TransferModal(json), buttons, undefined, this.loadTransferList)
-                                transferModal.show()
-                            })
-                            .catch(async response => {
-                                let errorModal = new Modal(ErrorModal((await response.json()).error()))
-                                errorModal.show()
-                            })
-                    } else {
-                        transferForm.reportValidity()
-                    }
-                })
             })
+        }
 
-            /**
-             * Shows the AddToBook modal when the user clicks the add to book button.
-             * @param {HTMLElement} button - the button that was clicked
-             * @param {number} accountCode - the account code to be saved
-             */
-            this.showAddToBookModal = (button, accountCode) => {
-                new Modal(AddToBookModal(accountCode),
-                    undefined,
-                    () => {
-                        let nameForm = document.getElementById("account-name")
-                        nameForm.addEventListener("submit", (event) => {
-                            event.preventDefault()
-                            if (nameForm.checkValidity()) {
-                                makeFormRequest("add_to_book", nameForm)
-                                    .then(response => {
-                                        if (!response.ok)
-                                            throw response
-                                        let msg = document.getElementById("add-to-book-message")
-                                        msg.className = ""
-                                        msg.textContent = "Account added successfully"
-                                    })
-                                    .catch(async response => {
-                                        console.log(response)
-                                        let msg = document.getElementById("add-to-book-message")
-                                        msg.classList.add("error")
-                                        msg.textContent = (await response.json()).error
-                                    })
-                            } else
-                                nameForm.reportValidity()
-                        })
-                    },
-                    () => {
-                        AccountBook.reload()
+        /**
+         * Shows the AddToBook modal when the user clicks the add to book button.
+         * @param {HTMLElement} button - the button that was clicked to open the AddToBook modal
+         * @param {number} accountCode - the account code to be saved
+         */
+        this.showAddToBookModal = (button, accountCode) => {
+            new Modal(AddToBookModal(accountCode),
+                undefined,
+                () => {
+                    let nameForm = document.getElementById("account-name")
+                    nameForm.addEventListener("submit", (event) => {
+                        event.preventDefault()
+                        if (nameForm.checkValidity()) {
+                            makeFormRequest("add_to_book", nameForm)
+                                .then(response => {
+                                    if (!response.ok)
+                                        throw response
+
+                                    let msg = document.getElementById("add-to-book-message")
+                                    msg.className = ""
+                                    msg.textContent = "Account added successfully"
+                                    // Remove the 'Add to account book' button after the account has been added
+                                    button.remove()
+                                    // Request a re-load of the account book
+                                    AccountBook.reload()
+                                    // Disable the submit button to prevent multiple submissions
+                                    nameForm.querySelector(".sendButton").disabled = true
+                                })
+                                .catch(async response => {
+                                    console.log(response)
+                                    let msg = document.getElementById("add-to-book-message")
+                                    msg.classList.add("error")
+                                    msg.textContent = (await response.json()).error
+                                })
+                        } else {
+                            nameForm.reportValidity()
+                        }
                     })
-                    .show()
-            }
+                }).show()
         }
 
         /**
@@ -354,7 +376,7 @@
          * @typedef {{transferID: number, date: string, amount: number, sender: number, recipient: sender, reason: string}} Transfer
          */
         /**
-         * Renders the given list of transfers to a table
+         * Renders the given list of transfers to a table.
          * @param {Transfer[]} transfers
          */
         this.renderTransferList = (transfers) => {
@@ -463,13 +485,18 @@
          */
         static #entries
 
+        /**
+         * @returns {Promise<AccountBookEntry[]>} - a Promise of the account book entries.
+         * To request a fresh copy of the account book from the server, first call {@link AccountBook#reload}.
+         */
         static load() {
-            AccountBook.reload()
+            if (!AccountBook.#entries)
+                AccountBook.reload()
             return AccountBook.#entries
         }
 
         /**
-         * Reloads the account book.
+         * Reloads the account book from the server.
          */
         static reload() {
             AccountBook.#entries = new Promise(async resolve => {
@@ -486,7 +513,6 @@
                         new Modal(ErrorModal((await response.json()).error())).show()
                     })
             })
-            console.log(AccountBook.#entries)
         }
     }
 
@@ -689,8 +715,8 @@
                 <label>Enter a custom name:
                     <input type="text" name="name" required>
                 </label>
-                    <input type="hidden" name="code" value="${savedCode}">
-                    <input type="submit" class="sendButton" value="Save">
+                <input type="hidden" name="code" value="${savedCode}">
+                <input type="submit" class="sendButton" value="Save">
             </form>
             <p id="add-to-book-message"></p>`
         )
