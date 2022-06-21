@@ -353,7 +353,7 @@
          */
         /**
          * Renders the given list of transfers to a table
-         * @param {Array<Transfer>} transfers
+         * @param {Transfer[]} transfers
          */
         this.renderTransferList = (transfers) => {
             let table = document.createElement("table")
@@ -450,6 +450,9 @@
      * @constructor
      */
     function AccountBook() {
+        /**
+         * @type {Promise<AccountBookEntry[]>}
+         */
         this.entries = new Promise(async resolve => {
             await makeGetRequest("account_book")
                 .then(response => {
@@ -458,9 +461,6 @@
                     return response.json()
                 })
                 .then(json => {
-                    /**
-                     * @type {Promise<AccountBookEntry[]>}
-                     */
                     resolve(json.bookEntries)
                 })
                 .catch(async response => {
@@ -472,7 +472,7 @@
     /**
      * Handles the autocomplete feature on the given input field.
      * @param {HTMLInputElement} textField - the text field to watch
-     * @param {Array<String>} entries - the entries where the autocomplete will search for suggestions
+     * @param {String[]} entries - the entries where the autocomplete will search for suggestions
      * @constructor
      */
     function Autocomplete(textField, entries) {
@@ -524,7 +524,7 @@
     /**
      * A modal that is drawn on top of other elements on the page.
      * @param {string} child - the modal content as html string
-     * @param {Array<{text: string, onClick: onClick}>} [buttons] - the buttons to be displayed
+     * @param {{text: string, onClick: onClick}[]} [buttons] - the buttons to be displayed
      * @param {*} [onShow] - callback function called after the modal is shown
      * @param {*} [onClose] - callback function called after the modal is closed
      * @constructor
