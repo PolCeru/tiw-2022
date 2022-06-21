@@ -24,28 +24,28 @@
             <div class="upperWrapper">
                 <h1 th:text="${'Transfer n. ' + transferCode}">Transfer confirmation</h1>
                 <div class="transfer-details">
-                    <p th:text="${transferCode}">code</p>
-                    <p th:text="${'$ ' + amount}">amount</p>
-                    <p th:text="${reason}">reason</p>
-                    <p th:text="${date}">date</p>
+                    <p th:text="${'Transfer code: ' + transferCode}">code</p>
+                    <p th:text="${'Amount: $' + amount}">amount</p>
+                    <p th:text="${'Reason: ' + reason}">reason</p>
+                    <p th:text="${'Date: ' + date}">date</p>
                 </div>
             </div>
             <div class="lowerWrapper">
                 <div class="sender-details">
                     <h2>Sender</h2>
-                    <p th:text="${'User code ' + senderUserCode}">senderUserCode</p>
-                    <p th:text="${'Account code ' + senderAccountCode}">senderAccountCode</p>
-                    <p th:text="${'Balance before transfer ' + senderBalanceBefore}">senderAccountBalanceBefore</p>
-                    <p th:text="${'Balance after transfer ' + senderBalanceAfter}">senderAccountBalanceAfter</p>
+                    <p th:text="${'User code: ' + senderUserCode}">senderUserCode</p>
+                    <p th:text="${'Account code: ' + senderAccountCode}">senderAccountCode</p>
+                    <p th:text="${'Balance before transfer: $' + senderBalanceBefore}">senderAccountBalanceBefore</p>
+                    <p th:text="${'Balance after transfer: $' + senderBalanceAfter}">senderAccountBalanceAfter</p>
                 </div>
                 <div id="vl"></div>
                 <div class="recipient-details">
                     <h2>Recipient</h2>
-                    <p th:text="${'User code ' + recipientUserCode}">recipientUserCode</p>
-                    <p th:text="${'Account code ' + recipientAccountCode}">recipientAccountCode</p>
-                    <p th:text="${'Balance before transfer ' + recipientBalanceBefore}">
+                    <p th:text="${'User code: ' + recipientUserCode}">recipientUserCode</p>
+                    <p th:text="${'Account code: ' + recipientAccountCode}">recipientAccountCode</p>
+                    <p th:text="${'Balance before transfer: $' + recipientBalanceBefore}">
                         recipientAccountBalanceBefore</p>
-                    <p th:text="${'Balance after transfer ' + recipientBalanceAfter}">recipientAccountBalanceAfter</p>
+                    <p th:text="${'Balance after transfer: $' + recipientBalanceAfter}">recipientAccountBalanceAfter</p>
                 </div>
             </div>
         </div>
