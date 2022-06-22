@@ -107,6 +107,7 @@ public class DoTransfer extends HttpServlet implements JsonServlet {
             return;
         }
 
+        // We don't update senderAccount and recipientAccount, so we have to keep in mind that they still contain the balance pre-transaction
         String jsonResponse = responseAdapter.toJson(new NewTransferResponse(transfer, senderAccount, recipientAccount));
         response.setStatus(HttpServletResponse.SC_CREATED);
         sendJson(response, jsonResponse);

@@ -29,13 +29,13 @@ public class NewTransferResponse {
 
         this.senderUserCode = sender.getUserID();
         this.senderAccountCode = transfer.getSender();
-        this.senderBalanceBefore = sender.getBalance() + transfer.getAmount();
-        this.senderBalanceAfter = sender.getBalance();
+        this.senderBalanceBefore = sender.getBalance();
+        this.senderBalanceAfter = sender.getBalance() - transfer.getAmount();
 
         this.recipientUserCode = recipient.getUserID();
         this.recipientAccountCode = transfer.getRecipient();
-        this.recipientBalanceBefore = recipient.getBalance() - transfer.getAmount();
-        this.recipientBalanceAfter = recipient.getBalance();
+        this.recipientBalanceBefore = recipient.getBalance();
+        this.recipientBalanceAfter = recipient.getBalance() + transfer.getAmount();
     }
 
     public int getTransferCode() {
