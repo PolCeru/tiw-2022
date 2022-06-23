@@ -174,7 +174,7 @@
                         <h2>Open a new account</h2>
                         <form id="open-account">
                             <label>Initial balance:
-                                <input type="number" step="0.01" min="0.01" name="balance" required>
+                                <input type="number" step="0.01" min="0.01" max="99999995" name="balance" required>
                             </label><br>
                             <input class="sendButton" type="submit" value="Open">
                             <p id="account-create-error" class="error"></p>
