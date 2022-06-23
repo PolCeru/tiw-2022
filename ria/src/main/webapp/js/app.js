@@ -62,8 +62,22 @@
                     if (response.ok && response.redirected) {
                         sessionStorage.clear()
                         window.location.href = response.url
+                        this.currentPage = "home";
+                        this.previousPage = "home";
                     }
                 })
+        })
+    }
+
+    /**
+     * The Header class handles the rendering of the header.
+     * @constructor
+     */
+    function Header() {
+        let back = document.getElementById("back")
+        back.addEventListener("click", (event) => {
+            event.preventDefault()
+            pageRouter.goBack()
         })
 
         /**
