@@ -15,7 +15,7 @@ public class UserDAO {
     }
 
     public User getUser(String email, String password) throws SQLException {
-        String query = "SELECT userID, email, name, surname FROM user WHERE email = ? AND password = ?";
+        String query = "SELECT userID, email, name, surname FROM user WHERE email = ? AND BINARY password = ?";
         try (PreparedStatement pstatement = con.prepareStatement(query)) {
             pstatement.setString(1, email);
             pstatement.setString(2, password);
