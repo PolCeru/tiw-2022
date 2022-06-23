@@ -99,6 +99,12 @@ public class DoTransfer extends HttpServlet implements JsonServlet {
                 return;
             }
 
+            // Check that the reason is not too long
+            if (reasonString.length() > 150) {
+                sendJsonError(response, HttpServletResponse.SC_BAD_REQUEST, REASON_TOO_LONG.message);
+                return;
+            }
+
             // All good, execute the transfer
             int transferCode = transferDao.createTransfer(senderAccountCode, recipientAccountCode, reasonString, amount);
             transfer = transferDao.getTransfer(transferCode);
@@ -107,7 +113,7 @@ public class DoTransfer extends HttpServlet implements JsonServlet {
             return;
         }
 
-        // We don't update senderAccount and recipientAccount, so we have to keep in mind that they still contain the balance pre-transaction
+        // We don't update senderAccount and recipientAccount, so they still hold the balance value pre-transaction
         String jsonResponse = responseAdapter.toJson(new NewTransferResponse(transfer, senderAccount, recipientAccount));
         response.setStatus(HttpServletResponse.SC_CREATED);
         sendJson(response, jsonResponse);

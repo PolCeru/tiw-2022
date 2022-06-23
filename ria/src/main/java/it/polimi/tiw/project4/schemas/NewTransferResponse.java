@@ -21,6 +21,9 @@ public class NewTransferResponse {
     private float recipientBalanceBefore;
     private float recipientBalanceAfter;
 
+    /**
+     * @apiNote An assumption is made about the sender and recipient parameters: they hold the balance value pre-transaction.
+     */
     public NewTransferResponse(Transfer transfer, Account sender, Account recipient) {
         this.transferCode = transfer.getTransferID();
         this.amount = transfer.getAmount();

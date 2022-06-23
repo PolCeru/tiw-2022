@@ -5,8 +5,8 @@ public enum TransferErrorMessage {
     NON_EXISTANT_RECIPIENT_ACCOUNT("The account you are trying to transfer to doesn't exist."),
     RECIPIENT_SAME_AS_SENDER("You can't transfer money to the same account you're transferring from."),
     NEGATIVE_AMOUNT("The amount you're trying to transfer is negative."),
-    INSUFFICIENT_FUNDS("You don't have enough money to make this transfer.");
-
+    INSUFFICIENT_FUNDS("You don't have enough money to make this transfer."),
+    REASON_TOO_LONG("The transfer reason is too long, it can be at most 150 characters.");
 
     public final String message;
 

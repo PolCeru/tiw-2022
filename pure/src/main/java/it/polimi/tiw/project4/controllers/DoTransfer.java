@@ -99,6 +99,13 @@ public class DoTransfer extends HttpServlet {
                 return;
             }
 
+            // Check that the reason is not too long
+            if (reasonString.length() > 150) {
+                String path = getServletContext().getContextPath() + "/transfer?result=error&code=" + REASON_TOO_LONG.ordinal();
+                response.sendRedirect(path);
+                return;
+            }
+
             // All good, execute the transfer
             transferCode = transferDao.createTransfer(senderAccountCode, recipientAccountCode, reasonString, amount);
         } catch (SQLException e) {

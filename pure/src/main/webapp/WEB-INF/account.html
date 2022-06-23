@@ -40,7 +40,7 @@
                     <input type="text" name="recipientAccountCode" th:value="${recipientAccountCode}" required>
                 </label><br>
                 <label>Reason:
-                    <input type="text" name="reason" th:value="${reason}" required>
+                    <input type="text" name="reason" maxlength="150" th:value="${reason}" required>
                 </label><br>
                 <label>Transfer amount:
                     <input type="number" step="0.01" min="0.01" name="amount" th:value="${amount}" required>

@@ -446,7 +446,7 @@
                                     <input type="text" name="recipientAccountCode" required>
                                 </label><br>
                                 <label>Reason:
-                                    <input type="text" name="reason" required>
+                                    <input type="text" name="reason" maxlength="150" required>
                                 </label><br>
                                 <label>Transfer amount:
                                     <input type="number" step="0.01" min="0.01" name="amount" required>
