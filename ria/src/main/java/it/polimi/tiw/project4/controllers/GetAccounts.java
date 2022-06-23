@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet("/account")
@@ -46,6 +47,10 @@ public class GetAccounts extends HttpServlet implements JsonServlet {
         } catch (SQLException e) {
             sendJsonError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to retrieve user's accounts");
             return;
+        }
+
+        if (userAccounts == null) {
+            userAccounts = new ArrayList<>();
         }
 
         String jsonResponse = responseAdapter.toJson(new AccountsResponse(userAccounts));

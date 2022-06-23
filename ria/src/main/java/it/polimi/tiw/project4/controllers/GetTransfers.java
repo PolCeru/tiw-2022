@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet("/transfer")
@@ -61,6 +62,10 @@ public class GetTransfers extends HttpServlet implements JsonServlet {
         } catch (SQLException e) {
             sendJsonError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to retrieve transfers for the selected account");
             return;
+        }
+
+        if (transferList == null) {
+            transferList = new ArrayList<>();
         }
 
         String jsonResponse = responseAdapter.toJson(new TransfersResponse(transferList));

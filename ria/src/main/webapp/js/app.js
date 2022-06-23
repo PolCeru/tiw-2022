@@ -54,18 +54,6 @@
             this.header.render()
             this.activePage.render()
         }
-    }
-
-    /**
-     * The Header class handles the rendering of the header.
-     * @constructor
-     */
-    function Header() {
-        let back = document.getElementById("back")
-        back.addEventListener("click", (event) => {
-            event.preventDefault()
-            pageRouter.goBack()
-        })
 
         document.getElementById("logout").addEventListener("click", (event) => {
             event.preventDefault()
@@ -118,7 +106,7 @@
                     this.renderAccountList(json.accounts)
                 })
                 .catch(async response => {
-                    let error = (await response.json()).error
+                    let error = (await response).error
                     let accountList = document.getElementById("account-list")
                     accountList.innerHTML =
                         `<div class="detailRow">
@@ -134,6 +122,14 @@
         this.renderAccountList = (accounts) => {
             let accountList = document.getElementById("account-list")
             accountList.innerHTML = ""
+
+            if (accounts.length === 0) {
+                accountList.innerHTML =
+                    `<div class="detailRow">
+                        <p class="error">No accounts found</p>
+                    </div>`
+                return;
+            }
 
             accounts.forEach(account => {
                 let row = document.createElement("div")
@@ -239,7 +235,7 @@
                 })
                 .then(json => this.renderTransferList(json.transfers))
                 .catch(async response => {
-                    let error = (await response.json()).error
+                    let error = (await response).error
                     document.getElementById("transfer-container").innerHTML = `<p class="error">${error}</p>`
                 })
         }
@@ -329,7 +325,7 @@
                                         throw response
 
                                     let msg = document.getElementById("add-to-book-message")
-                                    msg.className = ""
+                                    msg.className = "error"
                                     msg.textContent = "Account added successfully"
                                     // Remove the 'Add to account book' button after the account has been added
                                     button.remove()
@@ -381,7 +377,7 @@
          */
         this.renderTransferList = (transfers) => {
             if (transfers.length === 0) {
-                document.getElementById("transfer-container").innerHTML = `<p>No transfers for this account</p>`
+                document.getElementById("transfer-container").innerHTML = `<p class="error">No transfers for this account</p>`
                 return
             }
 
