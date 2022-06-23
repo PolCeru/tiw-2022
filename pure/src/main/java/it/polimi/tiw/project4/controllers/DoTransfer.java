@@ -77,9 +77,10 @@ public class DoTransfer extends HttpServlet {
                 response.sendRedirect(path);
                 return;
             }
+
             // Check that the recipient is not the same as the sender
             Account senderAccount = accountDao.getAccount(senderAccountCode);
-            if (recipientCode == senderAccount.getCode() && senderAccountCode == recipientAccountCode) {
+            if (recipientCode == senderAccount.getUserID() && senderAccountCode == recipientAccountCode) {
                 String path = getServletContext().getContextPath() + "/transfer?result=error&code=" + RECIPIENT_SAME_AS_SENDER.ordinal();
                 response.sendRedirect(path);
                 return;

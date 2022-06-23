@@ -80,9 +80,10 @@ public class DoTransfer extends HttpServlet implements JsonServlet {
                 sendJsonError(response, HttpServletResponse.SC_BAD_REQUEST, NON_EXISTANT_RECIPIENT_ACCOUNT.message);
                 return;
             }
+
             // Check that the recipient is not the same as the sender
             senderAccount = accountDao.getAccount(senderAccountCode);
-            if (recipientCode == senderAccount.getCode() && senderAccountCode == recipientAccountCode) {
+            if (recipientCode == senderAccount.getUserID() && senderAccountCode == recipientAccountCode) {
                 sendJsonError(response, HttpServletResponse.SC_BAD_REQUEST, RECIPIENT_SAME_AS_SENDER.message);
                 return;
             }
