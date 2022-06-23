@@ -120,7 +120,7 @@
                     this.renderAccountList(json.accounts)
                 })
                 .catch(async response => {
-                    let error = (await response).error
+                    let error = (await response.json()).error
                     let accountList = document.getElementById("account-list")
                     accountList.innerHTML =
                         `<div class="detailRow">
@@ -249,7 +249,7 @@
                 })
                 .then(json => this.renderTransferList(json.transfers))
                 .catch(async response => {
-                    let error = (await response).error
+                    let error = (await response.json()).error
                     document.getElementById("transfer-container").innerHTML = `<p class="error">${error}</p>`
                 })
         }
